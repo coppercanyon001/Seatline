@@ -5,7 +5,8 @@
 export const MINT_WORLD = {
   runtimeUrl: "https://cdn.mint.gg/rad/empty-grocery-shell-bf4e8eb12b4170e6-lod.rad",
   colliderUrl: "/mint-assets/world/collider.glb",
-  floorSurfaceY: 0,
+  splatFloorY: 0,
+  floorSurfaceY: 0.035,
   playableWidth: 26,
   playableDepth: 18,
   playableHeight: 7.5,

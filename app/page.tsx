@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import CalibrationView from "./CalibrationView";
+import GrandmasGroceryTrip from "./GrandmasGroceryTrip";
 
 export const metadata: Metadata = {
-  title: "Grandma’s Grocery Trip — Store Calibration",
-  description: "Calibrating the Mint grocery-store world before gameplay begins.",
+  title: "Grandma’s Grocery Trip",
+  description: "Grab Grandma’s groceries and reach checkout before the store closes.",
 };
 
 export default function Home() {
-  return <CalibrationView />;
+  return <GrandmasGroceryTrip />;
 }

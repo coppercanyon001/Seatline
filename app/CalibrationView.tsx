@@ -79,7 +79,7 @@ export default function CalibrationView() {
         const localCenter = localBounds.getCenter(new THREE.Vector3());
         worldRoot.position.set(
           -localCenter.x * worldScale.x,
-          MINT_WORLD.floorSurfaceY - localBounds.min.y * worldScale.y,
+          MINT_WORLD.splatFloorY - localBounds.min.y * worldScale.y,
           -localCenter.z * worldScale.z,
         );
         worldRoot.updateMatrixWorld(true);
