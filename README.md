@@ -1,98 +1,77 @@
-# vinext-starter
+# Final Whistle: Spain vs Argentina
 
-A clean full-stack starter running on
-[vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
-Drizzle support.
+An original Mint-first 3D arcade football final. Lead Spain through a fast
+3-v-3 match plus goalkeepers against Argentina in a miniature night stadium.
 
-## Prerequisites
+All visible and audible production assets—the pitch, stands, goals, props,
+players, animation, crowd, whistle, impacts, and victory audio—were created
+through Mint. Three.js is used only for assembly, lighting, transforms,
+animation playback, collision checks, camera work, AI, and game logic.
 
-- Node.js `>=22.13.0`
+## Gameplay
 
-## Quick Start
+- Move with `WASD` or the arrow keys; hold `Shift` to sprint.
+- Press `J` to pass and switch to the receiver.
+- Hold `K` or `Space` to charge a shot, then release.
+- Press `L` to tackle and `Q` to switch Spain players.
+- Play a 150-second final; a draw goes to golden goal.
+- Use the touch-sized movement and action controls on mobile.
+
+## Mint Asset Policy
+
+The stadium splat experiment was rejected because its preview could not be
+inspected against the project’s orientation, collider, pitch-clearance, and
+camera gates. The final game uses verified solid Mint modules.
+
+See [MINT_ASSET_MANIFEST.md](./MINT_ASSET_MANIFEST.md) for accepted production
+families, failed passes, provenance, and validation. See
+[GAME_WORKFLOW.md](./GAME_WORKFLOW.md) for the Mint-only production rules.
+
+## Local Development
+
+Requirements: Node.js `>=22.13.0`.
 
 ```bash
 npm install
 npm run dev
+```
+
+Build and test:
+
+```bash
 npm run build
+npm test
 ```
 
-This starter does not use `wrangler.jsonc`.
+Open `/?qa=1` for deterministic capture shortcuts:
 
-## Included Shape
+- `G`: Spain goal
+- `H`: Argentina goal
+- `X`: tied clock-expiry setup
+- `V`: Spain championship result
 
-- edit site code under `app/`
-- `.openai/hosting.json` declares optional Sites D1 and R2 bindings
-- `vite.config.ts` simulates declared bindings for local development
-- `db/schema.ts` starts intentionally empty
-- `examples/d1/` contains an optional D1 example surface
-- `drizzle.config.ts` supports local migration generation when needed
+## Project Structure
 
-## Workspace Auth Headers
-
-OpenAI workspace sites can read the current user's email from
-`oai-authenticated-user-email`.
-
-SIWC-authenticated workspace sites may also receive
-`oai-authenticated-user-full-name` when the user's SIWC profile has a non-empty
-`name` claim. The full-name value is percent-encoded UTF-8 and is accompanied by
-`oai-authenticated-user-full-name-encoding: percent-encoded-utf-8`.
-
-Treat the full name as optional and fall back to email when it is absent:
-
-```tsx
-import { headers } from "next/headers";
-
-export default async function Home() {
-  const requestHeaders = await headers();
-  const email = requestHeaders.get("oai-authenticated-user-email");
-  const encodedFullName = requestHeaders.get("oai-authenticated-user-full-name");
-  const fullName =
-    encodedFullName &&
-    requestHeaders.get("oai-authenticated-user-full-name-encoding") ===
-      "percent-encoded-utf-8"
-      ? decodeURIComponent(encodedFullName)
-      : null;
-
-  const displayName = fullName ?? email;
-  // ...
-}
+```text
+app/WorldCupFinal.tsx              Scene, gameplay, AI, camera, audio, and animation
+app/worldCupMintAssets.ts          Authoritative Mint runtime map
+public/models/world-cup-final/     Mint stadium, props, and player rigs
+public/animations/world-cup-final/ Mint animation clips
+public/audio/world-cup-final/      Mint match audio
+MINT_ASSET_MANIFEST.md             Provenance and verified behavior
+outputs/world-cup-final-tutorial.md
+outputs/world-cup-final-narration-script.md
+outputs/world-cup-final-capture-checklist.md
 ```
 
-## Optional Dispatch-Owned ChatGPT Sign-In
+## Tutorial Pack
 
-Import the ready-to-use helpers from `app/chatgpt-auth.ts` when the site needs
-optional or required ChatGPT sign-in:
+The `outputs/` folder contains a live production diary, a finished step-by-step
+tutorial, a narration script, a video capture checklist, eight Mint asset
+previews, and four final browser screenshots.
 
-- Use `getChatGPTUser()` for optional signed-in UI.
-- Use `requireChatGPTUser(returnTo)` for server-rendered pages that should send
-  anonymous visitors through Sign in with ChatGPT.
-- Use `chatGPTSignInPath(returnTo)` and `chatGPTSignOutPath(returnTo)` for
-  browser links or actions.
-- Pass a same-origin relative `returnTo` path for the destination after sign-in
-  or sign-out. The helper validates and safely encodes it.
-- Mark protected pages with `export const dynamic = "force-dynamic"` because
-  they depend on per-request identity headers.
+## Open-Source Gaming Notes
 
-Dispatch owns `/signin-with-chatgpt`, `/signout-with-chatgpt`, `/callback`, the
-OAuth cookies, and identity header injection. Do not implement app routes for
-those reserved paths. Routes that do not import and call the helper remain
-anonymous-compatible.
-
-SIWC establishes identity only; it does not prove workspace membership. Use the
-Sites hosting platform's access policy controls for workspace-wide restrictions,
-or enforce explicit server-side membership or allowlist checks.
-
-Use SIWC for account pages, user-specific dashboards, saved records, and write
-actions tied to the current ChatGPT user. Leave public content anonymous.
-
-## Useful Commands
-
-- `npm run dev`: start local development
-- `npm run build`: verify the vinext build output
-- `npm test`: build the starter and verify its rendered loading skeleton
-- `npm run db:generate`: generate Drizzle migrations after schema changes
-
-## Learn More
-
-- [vinext Documentation](https://github.com/cloudflare/vinext)
-- [Drizzle D1 Guide](https://orm.drizzle.team/docs/get-started/d1-new)
+The code is licensed under MIT. Generated assets may have separate rights under
+their Mint generation terms. Verify the asset rights for your use case before
+redistributing or selling asset packs.

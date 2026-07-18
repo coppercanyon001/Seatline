@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import GrandmasGroceryTrip from "./GrandmasGroceryTrip";
+import WorldCupFinal from "./WorldCupFinal";
 
 export const metadata: Metadata = {
-  title: "Grandma’s Grocery Trip",
-  description: "Grab Grandma’s groceries and reach checkout before the store closes.",
+  title: "Final Whistle: Spain vs Argentina",
+  description: "Lead Spain against Argentina in an original 3D arcade football final.",
 };
 
 export default function Home() {
-  return <GrandmasGroceryTrip />;
+  return <WorldCupFinal />;
 }
