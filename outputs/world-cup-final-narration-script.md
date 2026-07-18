@@ -6,7 +6,7 @@ Target length: 5–7 minutes.
 
 **On screen:** `09-final-menu.png`, then a quick cut to `11-goal-spain.png`.
 
-**Narration:**  
+**Narration:**
 “This is Final Whistle, an original Spain-versus-Argentina 3D football final.
 The stadium, pitch, props, characters, animation, and audio were all created
 through Mint. Three.js turns those assets into a playable 3-v-3 match with
@@ -58,13 +58,16 @@ first frame. The rig animates naturally while gameplay remains authoritative.”
 
 ## 2:55–3:35 — Assemble From the Camera
 
-**On screen:** `10-live-match.png`; zoom into stands, players, pitch, and goal.
+**On screen:** `10-live-match.png`, then
+`22-final-wide-empty-stands-seated-crowd.png`; zoom into stands, players, pitch,
+and goal.
 
 **Narration:**  
 “The stadium is assembled entirely from accepted Mint models. The first browser
 review showed that the characters were too small for the broadcast view. I
-scaled them up and moved the camera lower and closer. The second pass kept the
-stadium spectacle while making team silhouettes and the ball readable.”
+scaled them up and grounded every object to the measured top of the pitch. A
+later reference called for a much wider, more realistic view, so the final
+camera keeps almost the whole field visible with gentle horizontal tracking.”
 
 ## 3:35–4:35 — Build the Match in Layers
 
@@ -73,23 +76,36 @@ match state; cut back to gameplay.
 
 **Narration:**  
 “Gameplay was layered in a testable order: movement, loose-ball physics,
-possession, passing, charged shots, goal detection, kickoffs, opponent pressure,
-goalkeeper saves, tackling, then the 150-second clock and golden goal. Every
-player has a deterministic gameplay root, a cloned Mint rig, a mixer, semantic
+possession, assisted passing, led through balls, support runs, charged shots,
+goal detection, kickoffs, opponent pressure, goalkeeper saves, contextual
+switching, tackling, then the 150-second clock and golden goal. Every player
+has a deterministic gameplay root, a cloned Mint rig, a mixer, semantic
 actions, a home position, and short action locks.”
 
-## 4:35–5:15 — QA the Whole Journey
+## 4:35–5:15 — Replace the Crowd, Not Just the Characters
+
+**On screen:** empty stand previews 20–21, then captures 22–23.
+
+**Narration:**
+“The original grandstands contained spectators baked into one mesh. That made
+it impossible for the new people to be the only fans, so Mint generated a
+crowdless straight and corner kit. Four new supporter rigs received seated
+animation sets, and 162 clones now fill the bowl. Every one stays seated and
+crossfades into a varied cheer after either team scores.”
+
+## 5:15–5:50 — QA the Whole Journey
 
 **On screen:** `11-goal-spain.png`, golden-goal HUD, then
-`12-spain-champions.png`.
+`12-spain-champions.png` and `23-final-all-fans-seated-cheer.png`.
 
 **Narration:**  
 “A small QA route makes hard-to-reach states deterministic. I forced both goal
 states, a one-all clock expiry, and a two-one Spain victory. The final browser
-pass verified passing, scoring, golden goal, victory, rematch, and a clean
+pass verified the wide camera, passing, through balls, grounded players, ball
+visibility, identical goals, synchronized seated cheering, and a clean
 console.”
 
-## 5:15–5:40 — Close
+## 5:50–6:15 — Close
 
 **On screen:** Final menu, source filenames, and deployed URL.
 

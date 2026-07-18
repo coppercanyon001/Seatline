@@ -20,9 +20,12 @@ layout, meters, buttons, and accessible controls.
   embedded text, photorealism, static runtime characters, or procedural
   substitute meshes.
 - Fast 3-v-3 outfield football plus one goalkeeper per side.
-- Spain can move, sprint, pass, tackle, switch player, and charge shots.
+- Spain can move, sprint, pass, play a led through ball, tackle, switch player,
+  and charge shots.
 - Argentina pressures, passes, shoots, and uses a goalkeeper.
 - 150-second match, golden goal on a draw, result, and instant rematch.
+- Wide broadcast camera, assisted target selection, off-ball support runs,
+  contextual switching, and a possession readout.
 - Keyboard and touch-sized controls.
 
 ## World Decision
@@ -36,21 +39,24 @@ and camera-envelope checks.
 
 Decision: **reject before final generation and pivot to solid Mint modules**.
 
-The production stadium uses one authoritative Mint pitch, reusable Mint straight
-and corner stand modules, two Mint goals, and four Mint corner flags. No
+The production stadium uses one authoritative Mint pitch, a crowdless modular
+Mint grandstand family, two Mint goals, and four Mint corner flags. No
 procedural world geometry is used.
 
 ## Accepted Production Families
 
 | Family | Mint source | Local artifacts | Status |
 | --- | --- | --- | --- |
-| Solid stadium kit | [Mint chat](https://mint.gg/chat/ph74x6mhqdn6pe9a6hqytkdvrx8asjdk) | `public/models/world-cup-final/pitch.glb`, `straight-stand.glb`, `corner-stand.glb`, `goal.glb` | Accepted |
+| Core pitch and goals | [Mint chat](https://mint.gg/chat/ph74x6mhqdn6pe9a6hqytkdvrx8asjdk) | `public/models/world-cup-final/pitch.glb`, `goal.glb` | Accepted |
+| Empty grandstand kit | [Mint chat](https://mint.gg/chat/ph74a7xnk3ckj3z08rn1mwr9c58ar5ve) | `public/models/world-cup-final/straight-stand.glb`, `corner-stand.glb` | Accepted |
 | Match props | [Mint chat](https://mint.gg/chat/ph72h5kerwdw0nzdfnwe2a75fh8arvrg) | `corner-flag.glb`, `trophy.glb`, `confetti.glb` | Accepted |
 | Classic match ball replacement | [Mint chat](https://mint.gg/chat/ph7cs7g4v4xhyycsjzkdqr2xch8asans) | `public/models/world-cup-final/football.glb` | Accepted |
 | Outfield roster | [Mint chat](https://mint.gg/chat/ph797348b0e47k2hstbtrz19fd8asama) | `players/spain-outfield.glb`, `players/argentina-outfield.glb` | Accepted |
 | Goalkeeper roster | [Mint chat](https://mint.gg/chat/ph7bhc6jvfkaemc0vpxvbpx31n8arjb9) | `players/spain-goalkeeper.glb`, `players/argentina-goalkeeper.glb` | Accepted |
 | Outfield animation pass | Mint animation catalog batch | Six clips per outfield rig: idle, run, kick, tackle, hit, victory | Accepted |
 | Goalkeeper animation pass | Mint animation catalog batch | Six clips per goalkeeper rig: idle, run, kick, save, hit, victory | Accepted |
+| Four-person supporter cast | [Mint chat](https://mint.gg/chat/ph7ewj7v35n5mg5mqthgtz04tx8ashcq) | Four fan rigs under `public/models/world-cup-final/fans/` | Accepted |
+| Seated supporter animation pass | [Mint chat](https://mint.gg/chat/ph7ewj7v35n5mg5mqthgtz04tx8ashcq) | Per-fan seated idle and seated cheer clips under `public/animations/world-cup-final/fans/` | Accepted |
 | Match audio | Mint audio generation | `crowd-ambience.mp3`, `referee-whistle.mp3`, `ball-kick.mp3`, `goal-roar.mp3`, `save-impact.mp3`, `victory-sting.mp3` | Accepted |
 
 The authoritative code map is `app/worldCupMintAssets.ts`.
@@ -63,12 +69,15 @@ The authoritative code map is `app/worldCupMintAssets.ts`.
 | Four-character roster batch | [Mint chat](https://mint.gg/chat/ph7783fe4atx20mvnhnhkn3tvd8ar2v1) | Final generation failed. The complete pass was discarded. |
 | Stadium splat experiment | [Mint chat](https://mint.gg/chat/ph781qq61mpygb3a7jrvgba13h8ara97) | Rejected before approval because the preview could not be inspected. |
 | Original candy-gold football | [Mint chat](https://mint.gg/chat/ph72h5kerwdw0nzdfnwe2a75fh8arvrg) | Superseded by a smaller, visually unambiguous black-and-white match ball. |
+| Original populated stand modules | [Mint chat](https://mint.gg/chat/ph74x6mhqdn6pe9a6hqytkdvrx8asjdk) | Straight and corner stands were superseded because spectators were baked into each single mesh. |
+| Single multi-person supporter row | [Mint chat](https://mint.gg/chat/ph70gt1d6w6zh545sjxqvcfn1d8as9c9) | Superseded by individually rigged people so every fan could stay seated and animate. |
+| Supporter sprite experiment | [Mint chat](https://mint.gg/chat/ph77wt59cj3m1mx4cvega7arw98askkj) | Rejected after inspection found a baked checkerboard instead of usable transparency. |
 
 No runtime path references a partial, failed, or rejected pass.
 
 ## Structural Validation
 
-- All 12 production world/prop/player GLBs have a valid GLB header, declared
+- All production world/prop/player/fan GLBs have a valid GLB header, declared
   length, JSON chunk, nonzero bounds, one mesh, and valid accessor ranges.
 - Each of the four player models contains one skinned mesh, one skin, 26 named
   nodes, one material, and authored textures.
@@ -76,6 +85,9 @@ No runtime path references a partial, failed, or rejected pass.
   targets are missing.
 - Node order, joint order, and animation target names match exactly between each
   production rig and all six of its clips.
+- Each of the four supporter models contains one skin. Every selected seated
+  clip contains one animation targeting 24 named rig nodes, with zero missing
+  targets across all eight runtime supporter clips.
 - Clip durations are nonzero: idle 4.033s, run 0.767s, kick 1.667s, tackle
   1.567s, hit 1.667s, goalkeeper save 2.733s, and victory 9.367s.
 - Mint clips carry authored hip translation. Runtime normalization preserves
@@ -95,13 +107,13 @@ No runtime path references a partial, failed, or rejected pass.
 - The replacement classic football is a valid 842,968-byte GLB with one mesh,
   one material, three textures, nonzero bounds, and a visually inspected white
   surface with black panels.
-- Seventy-four additional rigged Mint outfield clones fill three rows along
-  both touchlines and two rows behind both goals. They use the accepted idle
-  and victory clips; every spectator transitions into the cheer animation
-  whenever either team scores.
+- One hundred sixty-two clones from four dedicated Mint fan rigs fill three
+  long-stand rows and two rows behind each goal. Only seated motions are loaded:
+  every spectator crossfades from seated idle into a varied seated cheer when
+  either team scores.
 - Browser QA confirmed the smaller classic ball, outward-facing net depth on
-  both goals, the full four-sided crowd, score-triggered cheering, and zero
-  console errors.
+  two identically constructed goals, the full four-sided supporter cast,
+  score-triggered cheering, the wide broadcast view, and zero console errors.
 
 ## Runtime Layout
 
@@ -114,7 +126,8 @@ No runtime path references a partial, failed, or rejected pass.
   attached, passed, shot, bounced, saved, and scored by the gameplay simulation.
 - Both goal assets face into the pitch so their net depth extends outside the
   field of play.
-- Stadium stands are reused instances from the accepted compatible Mint family.
-- The stadium uses a flush inner bowl plus a second outer ring of compatible
-  Mint straight and corner modules.
+- Stadium stands are reused instances from the accepted crowdless Mint family.
+- The far and end sections stay close to the pitch while the near grandstand is
+  placed behind the broadcast camera, creating a larger bowl without blocking
+  the realistic zoomed-out field view.
 - Trophy and confetti are accepted Mint props revealed only for Spain's win.

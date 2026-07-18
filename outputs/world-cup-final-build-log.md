@@ -311,3 +311,60 @@ New production captures:
 The final browser pass confirmed the compact black-and-white ball, corrected
 goal orientation, populated four-sided stands, a score-triggered crowd state,
 and zero console errors.
+
+## Chapter 14 — Dedicated Seated Fans, Crowdless Stands, and Broadcast Play
+
+The final crowd review exposed a provenance and staging problem: the accepted
+stand modules contained old spectators baked into a single mesh. Adding new
+people on top could never make the dedicated fan cast the only spectators.
+
+Mint generated a four-person riggable supporter family in
+[this asset chat](https://mint.gg/chat/ph7ewj7v35n5mg5mqthgtz04tx8ashcq):
+
+- red scarf fan;
+- sky jacket fan;
+- yellow cap fan;
+- blue scarf fan.
+
+All four rigs completed the nine-motion `seated_npc` set. Runtime integration
+uses one seated idle and one varied seated celebration per fan. Structural
+inspection confirmed one skin per character, one clip per selected animation,
+24 targeted rig nodes per clip, and zero missing target names. The horizontal
+hip-track matcher was also corrected to normalize every `*Hips.position` track,
+removing the drift that made cloned characters appear to glitch.
+
+A one-piece supporter-row attempt and a transparent sprite attempt were
+recorded but rejected. The row could not provide per-person animation, and the
+sprite contained a baked checkerboard. The successful pivot was a new pair of
+crowdless Mint grandstand modules in
+[this asset chat](https://mint.gg/chat/ph74a7xnk3ckj3z08rn1mwr9c58ar5ve).
+The visually inspected straight and corner modules contain empty red, gold, and
+navy seats with no embedded people.
+
+The finished stadium uses 162 seated clones from the four-person fan family.
+Every fan remains in a seated motion and all 162 crossfade into varied seated
+cheers on either goal.
+
+The gameplay pass also added:
+
+- assisted ground-pass targeting;
+- a led through-ball command on `I`;
+- off-ball attacking support runs;
+- contextual Spain-player switching;
+- a possession readout;
+- one shared goal-construction helper for identical left and right frames;
+- a 42-degree, gently tracking broadcast camera positioned to keep nearly the
+  whole pitch visible at a realistic scale.
+
+Production and diagnostic captures:
+
+- `18-wide-broadcast-seated-crowd.png`
+- `19-all-seated-goal-cheer.png`
+- `20-empty-straight-stand-preview.webp`
+- `21-empty-corner-stand-preview.webp`
+- `22-final-wide-empty-stands-seated-crowd.png`
+- `23-final-all-fans-seated-cheer.png`
+
+The last browser pass confirmed grounded players, a readable black-and-white
+ball, identical goal construction, only the dedicated fan family in the
+stands, synchronized seated cheering, and no runtime errors.

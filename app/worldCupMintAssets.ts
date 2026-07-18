@@ -55,6 +55,36 @@ export const WORLD_CUP_MINT_ASSETS = {
       },
     },
   },
+  fans: {
+    redScarf: {
+      model: "/models/world-cup-final/fans/red-scarf.glb",
+      animations: {
+        idle: "/animations/world-cup-final/fans/red-scarf/idle.glb",
+        cheer: "/animations/world-cup-final/fans/red-scarf/cheer.glb",
+      },
+    },
+    skyJacket: {
+      model: "/models/world-cup-final/fans/sky-jacket.glb",
+      animations: {
+        idle: "/animations/world-cup-final/fans/sky-jacket/idle.glb",
+        cheer: "/animations/world-cup-final/fans/sky-jacket/cheer.glb",
+      },
+    },
+    yellowCap: {
+      model: "/models/world-cup-final/fans/yellow-cap.glb",
+      animations: {
+        idle: "/animations/world-cup-final/fans/yellow-cap/idle.glb",
+        cheer: "/animations/world-cup-final/fans/yellow-cap/cheer.glb",
+      },
+    },
+    blueScarf: {
+      model: "/models/world-cup-final/fans/blue-scarf.glb",
+      animations: {
+        idle: "/animations/world-cup-final/fans/blue-scarf/idle.glb",
+        cheer: "/animations/world-cup-final/fans/blue-scarf/cheer.glb",
+      },
+    },
+  },
   audio: {
     crowd: "/audio/world-cup-final/crowd-ambience.mp3",
     whistle: "/audio/world-cup-final/referee-whistle.mp3",
@@ -66,3 +96,4 @@ export const WORLD_CUP_MINT_ASSETS = {
 } as const;
 
 export type WorldCupCharacterKey = keyof typeof WORLD_CUP_MINT_ASSETS.characters;
+export type WorldCupFanKey = keyof typeof WORLD_CUP_MINT_ASSETS.fans;

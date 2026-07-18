@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   WORLD_CUP_MINT_ASSETS as ASSETS,
   type WorldCupCharacterKey,
+  type WorldCupFanKey,
 } from "./worldCupMintAssets";
 
 type Phase = "loading" | "menu" | "playing" | "goal" | "finished" | "error";
@@ -20,6 +21,7 @@ type Ui = {
   sound: boolean;
   shotCharge: number;
   activePlayer: number;
+  possession: Team | "loose";
   winner: Team | "draw" | null;
 };
 type Controller = {
@@ -29,6 +31,7 @@ type Controller = {
   press: (command: Command) => void;
   release: (command: Command) => void;
   pass: () => void;
+  throughPass: () => void;
   tackle: () => void;
   switchPlayer: () => void;
 };
@@ -48,6 +51,7 @@ const INITIAL_UI: Ui = {
   sound: true,
   shotCharge: 0,
   activePlayer: 7,
+  possession: "loose",
   winner: null,
 };
 
@@ -116,18 +120,17 @@ export default function WorldCupFinal() {
           cooldown: number;
         };
         type Spectator = {
-          team: Team;
           root: import("three").Group;
           mixer: import("three").AnimationMixer;
           actions: Record<string, import("three").AnimationAction>;
-          currentAction: string;
+          currentAction: "idle" | "cheer";
         };
 
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x09162f);
         scene.fog = new THREE.Fog(0x09162f, 38, 86);
-        const camera = new THREE.PerspectiveCamera(39, 1, 0.1, 120);
-        camera.position.set(-13, 17, 24);
+        const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 150);
+        camera.position.set(-2, 18.5, 24.5);
         camera.lookAt(0, 0, 0);
 
         const renderer = new THREE.WebGLRenderer({
@@ -173,11 +176,19 @@ export default function WorldCupFinal() {
           WorldCupCharacterKey,
           (typeof ASSETS.characters)[WorldCupCharacterKey],
         ][];
+        const fanEntries = Object.entries(ASSETS.fans) as [
+          WorldCupFanKey,
+          (typeof ASSETS.fans)[WorldCupFanKey],
+        ][];
         const paths = [
           ...Object.values(ASSETS.world),
           ...characterEntries.flatMap(([, character]) => [
             character.model,
             ...Object.values(character.animations),
+          ]),
+          ...fanEntries.flatMap(([, fan]) => [
+            fan.model,
+            ...Object.values(fan.animations),
           ]),
         ];
         const loaded = await Promise.all(
@@ -252,43 +263,35 @@ export default function WorldCupFinal() {
         const ballGroundY = pitchSurfaceY + 0.07;
 
         const addStand = (corner: boolean, x: number, z: number, rotation: number) => {
-          const stand = fitWidth(
-            sourceScene(corner ? ASSETS.world.cornerStand : ASSETS.world.straightStand),
-            corner ? 10.6 : 18.4,
-          );
+          const source = sourceScene(corner ? ASSETS.world.cornerStand : ASSETS.world.straightStand);
+          source.rotation.y = Math.PI / 2;
+          const stand = fitHeight(source, corner ? 5.15 : 5.35);
           stand.position.set(x, corner ? 0.08 : 0, z);
           stand.rotation.y = rotation;
           stadium.add(stand);
         };
-        for (const x of [-18, 0, 18]) {
-          addStand(false, x, -14.7, 0);
-          addStand(false, x, 14.7, Math.PI);
-          addStand(false, x, -21.1, 0);
-          addStand(false, x, 21.1, Math.PI);
+        for (const x of [-24, -16, -8, 0, 8, 16, 24]) {
+          addStand(false, x, -15.2, Math.PI);
+          addStand(false, x, 34, 0);
         }
-        for (const z of [-8.6, 8.6]) {
-          addStand(false, -19.2, z, Math.PI / 2);
-          addStand(false, 19.2, z, -Math.PI / 2);
-          addStand(false, -25.7, z, Math.PI / 2);
-          addStand(false, 25.7, z, -Math.PI / 2);
+        for (const z of [-8.2, 0, 8.2, 16.4, 24.6]) {
+          addStand(false, -22.5, z, -Math.PI / 2);
+          addStand(false, 22.5, z, Math.PI / 2);
         }
-        addStand(true, -18, -13.3, Math.PI / 4);
-        addStand(true, 18, -13.3, -Math.PI / 4);
-        addStand(true, -18, 13.3, (3 * Math.PI) / 4);
-        addStand(true, 18, 13.3, (-3 * Math.PI) / 4);
-        addStand(true, -24.4, -19.5, Math.PI / 4);
-        addStand(true, 24.4, -19.5, -Math.PI / 4);
-        addStand(true, -24.4, 19.5, (3 * Math.PI) / 4);
-        addStand(true, 24.4, 19.5, (-3 * Math.PI) / 4);
+        addStand(true, -20.2, -14.2, (5 * Math.PI) / 4);
+        addStand(true, 20.2, -14.2, (3 * Math.PI) / 4);
+        addStand(true, -20.2, 32.8, (7 * Math.PI) / 4);
+        addStand(true, 20.2, 32.8, Math.PI / 4);
 
-        const leftGoal = fitHeight(sourceScene(ASSETS.world.goal), 2.45);
-        leftGoal.position.set(-15.05, pitchSurfaceY, 0);
-        leftGoal.rotation.y = -Math.PI / 2;
-        stadium.add(leftGoal);
-        const rightGoal = fitHeight(sourceScene(ASSETS.world.goal), 2.45);
-        rightGoal.position.set(15.05, pitchSurfaceY, 0);
-        rightGoal.rotation.y = Math.PI / 2;
-        stadium.add(rightGoal);
+        const createGoal = (x: number, rotation: number) => {
+          const goal = fitHeight(sourceScene(ASSETS.world.goal), 2.45);
+          goal.position.set(x, pitchSurfaceY, 0);
+          goal.rotation.y = rotation;
+          stadium.add(goal);
+          return goal;
+        };
+        createGoal(-15.05, -Math.PI / 2);
+        createGoal(15.05, Math.PI / 2);
 
         for (const [x, z, rotation] of [
           [-14.8, -10.5, 0],
@@ -319,7 +322,7 @@ export default function WorldCupFinal() {
         const normalizeClip = (clip: import("three").AnimationClip) => {
           const normalized = clip.clone();
           for (const track of normalized.tracks) {
-            if (!/(^|\\.)Hips\\.position$/i.test(track.name)) continue;
+            if (!/hips\.position$/i.test(track.name)) continue;
             const values = track.values;
             if (values.length < 3) continue;
             const x = values[0];
@@ -395,66 +398,78 @@ export default function WorldCupFinal() {
         const argentinaKeeper = createPlayer("argentinaGoalkeeper", "argentina", "goalkeeper", 23, 13.9, 0);
         let controlled = spain[0];
 
+        const fanKeys = Object.keys(ASSETS.fans) as WorldCupFanKey[];
         const createSpectator = (
-          team: Team,
+          fanKey: WorldCupFanKey,
           x: number,
           y: number,
           z: number,
           rotation: number,
           height: number,
         ) => {
-          const key: WorldCupCharacterKey =
-            team === "spain" ? "spainOutfield" : "argentinaOutfield";
-          const character = ASSETS.characters[key];
-          const root = fitHeight(sourceScene(character.model), height);
+          const fan = ASSETS.fans[fanKey];
+          const root = fitHeight(sourceScene(fan.model), height);
           root.position.set(x, y, z);
           root.rotation.y = rotation;
           spectatorRoot.add(root);
           const mixer = new THREE.AnimationMixer(root);
           const actions: Record<string, import("three").AnimationAction> = {};
-          for (const name of ["idle", "victory"] as const) {
-            const source = gltfs.get(character.animations[name])!.animations[0];
+          for (const name of ["idle", "cheer"] as const) {
+            const source = gltfs.get(fan.animations[name])!.animations[0];
             const action = mixer.clipAction(normalizeClip(source), root);
-            if (name === "victory") {
+            if (name === "cheer") {
               action.setLoop(THREE.LoopRepeat, 2);
               action.clampWhenFinished = true;
             }
             actions[name] = action;
           }
           actions.idle.reset().play();
-          spectators.push({ team, root, mixer, actions, currentAction: "idle" });
+          actions.idle.time = (spectators.length % 7) * 0.17;
+          spectators.push({ root, mixer, actions, currentAction: "idle" });
         };
-        const supporterXs = [-24, -18, -12, -6, 0, 6, 12, 18, 24];
+        const supporterXs = Array.from({ length: 21 }, (_, index) => -25 + index * 2.5);
         const sideRows = [
-          { z: 12.45, y: 2.35, height: 1.16 },
-          { z: 14.1, y: 3.55, height: 1.2 },
-          { z: 15.75, y: 4.75, height: 1.24 },
+          { farZ: -12.95, nearZ: 31.75, y: 1.25, height: 1.5 },
+          { farZ: -14.6, nearZ: 33.4, y: 2.55, height: 1.54 },
+          { farZ: -16.25, nearZ: 35.05, y: 4.0, height: 1.58 },
         ] as const;
         sideRows.forEach((row, rowIndex) => {
           supporterXs.forEach((x, index) => {
-            const team: Team = (index + rowIndex) % 2 === 0 ? "spain" : "argentina";
-            createSpectator(team, x, row.y, -row.z, 0, row.height);
             createSpectator(
-              team === "spain" ? "argentina" : "spain",
+              fanKeys[(index + rowIndex * 2) % fanKeys.length],
               x,
               row.y,
-              row.z,
+              row.farZ,
+              0,
+              row.height,
+            );
+            createSpectator(
+              fanKeys[(index + rowIndex * 2 + 2) % fanKeys.length],
+              x,
+              row.y,
+              row.nearZ,
               Math.PI,
               row.height,
             );
           });
         });
-        const endSupporterZs = [-8, -4, 0, 4, 8];
+        const endSupporterZs = [-9, -6.75, -4.5, -2.25, 0, 2.25, 4.5, 6.75, 9];
         const endRows = [
-          { x: 18.15, y: 2.4, height: 1.16 },
-          { x: 20.15, y: 4.05, height: 1.22 },
+          { x: 21.45, y: 1.35, height: 1.5 },
+          { x: 23.45, y: 3.25, height: 1.56 },
         ] as const;
         endRows.forEach((row, rowIndex) => {
           endSupporterZs.forEach((z, index) => {
-            const team: Team = (index + rowIndex) % 2 === 0 ? "spain" : "argentina";
-            createSpectator(team, -row.x, row.y, z, Math.PI / 2, row.height);
             createSpectator(
-              team === "spain" ? "argentina" : "spain",
+              fanKeys[(index + rowIndex) % fanKeys.length],
+              -row.x,
+              row.y,
+              z,
+              Math.PI / 2,
+              row.height,
+            );
+            createSpectator(
+              fanKeys[(index + rowIndex + 2) % fanKeys.length],
               row.x,
               row.y,
               z,
@@ -463,19 +478,15 @@ export default function WorldCupFinal() {
             );
           });
         });
-        const playSpectatorAction = (spectator: Spectator, name: "idle" | "victory") => {
+        const playSpectatorAction = (spectator: Spectator, name: "idle" | "cheer") => {
           if (spectator.currentAction === name) return;
           spectator.actions[name].reset().fadeIn(0.18).play();
           spectator.actions[spectator.currentAction]?.fadeOut(0.18);
           spectator.currentAction = name;
         };
-        const setSpectatorMood = (winner: Team | "all" | null) => {
+        const setSpectatorMood = (celebrating: "all" | null) => {
           spectators.forEach((spectator) => {
-            const action =
-              winner && (winner === "all" || spectator.team === winner)
-                ? "victory"
-                : "idle";
-            playSpectatorAction(spectator, action);
+            playSpectatorAction(spectator, celebrating ? "cheer" : "idle");
           });
         };
 
@@ -550,6 +561,9 @@ export default function WorldCupFinal() {
           player.possessionSince = elapsed;
           ballVelocity.set(0, 0, 0);
           lastTouch = player.team;
+          setUi((value) =>
+            value.possession === player.team ? value : { ...value, possession: player.team },
+          );
         };
         const releaseBall = (
           player: Player,
@@ -567,33 +581,69 @@ export default function WorldCupFinal() {
           ballVelocity.y = lift;
           playAction(player, "kick", true);
           playSound("kick");
+          setUi((value) => ({ ...value, possession: "loose" }));
         };
-        const passBall = (player: Player) => {
+        const readInputDirection = () =>
+          new THREE.Vector3(
+            (held.has("up") ? 1 : 0) - (held.has("down") ? 1 : 0),
+            0,
+            (held.has("right") ? 1 : 0) - (held.has("left") ? 1 : 0),
+          );
+        const selectPassTarget = (player: Player, through: boolean) => {
+          const attack = new THREE.Vector3(player.team === "spain" ? 1 : -1, 0, 0);
+          const input = player === controlled ? readInputDirection() : attack.clone();
+          const desired = input.lengthSq() > 0.01 ? input.normalize() : attack;
+          return players
+            .filter(
+              (candidate) =>
+                candidate.team === player.team &&
+                candidate !== player &&
+                candidate.role === "outfield",
+            )
+            .sort((a, b) => {
+              const aVector = a.root.position.clone().sub(player.root.position).setY(0);
+              const bVector = b.root.position.clone().sub(player.root.position).setY(0);
+              const aForward = aVector.dot(desired);
+              const bForward = bVector.dot(desired);
+              const aAttack = aVector.dot(attack);
+              const bAttack = bVector.dot(attack);
+              const aScore = aForward + (through ? aAttack * 1.4 : -aVector.length() * 0.18);
+              const bScore = bForward + (through ? bAttack * 1.4 : -bVector.length() * 0.18);
+              return bScore - aScore;
+            })[0];
+        };
+        const passBall = (player: Player, through = false) => {
           if (ballOwner !== player) return;
-          const teammates = players
-            .filter((candidate) => candidate.team === player.team && candidate !== player && candidate.role === "outfield")
-            .sort(
-              (a, b) =>
-                a.root.position.distanceToSquared(player.root.position) -
-                b.root.position.distanceToSquared(player.root.position),
-            );
-          const target = teammates.find((candidate) => {
-            const ahead = candidate.root.position.x - player.root.position.x;
-            return player.team === "spain" ? ahead > -1 : ahead < 1;
-          }) ?? teammates[0];
+          const target = selectPassTarget(player, through);
           if (!target) return;
-          const lead = target.root.position.clone().addScaledVector(target.velocity, 0.18);
-          releaseBall(player, lead.sub(player.root.position), 8.4, 0.42);
+          const attack = new THREE.Vector3(player.team === "spain" ? 1 : -1, 0, 0);
+          const lead = target.root.position
+            .clone()
+            .addScaledVector(target.velocity, through ? 0.62 : 0.24)
+            .addScaledVector(attack, through ? 1.65 : 0);
+          const distance = lead.distanceTo(player.root.position);
+          releaseBall(
+            player,
+            lead.sub(player.root.position),
+            through ? 10.2 : THREE.MathUtils.clamp(7.3 + distance * 0.22, 7.8, 9.5),
+            through ? 0.24 : 0.12,
+          );
           if (player.team === "spain") {
             controlled = target;
-            setUi((value) => ({ ...value, activePlayer: target.number, status: "Pass and move!" }));
+            setUi((value) => ({
+              ...value,
+              activePlayer: target.number,
+              status: through ? "Through ball — run onto it!" : "Pass and move!",
+            }));
           }
         };
         const shootBall = (player: Player, charge: number) => {
           if (ballOwner !== player) return;
           const goalX = player.team === "spain" ? 16 : -16;
           const targetZ = THREE.MathUtils.clamp(
-            player.root.position.z * -0.24 + (Math.random() - 0.5) * 1.1,
+            player.root.position.z * -0.24 +
+              readInputDirection().z * 1.15 +
+              (Math.random() - 0.5) * 0.72,
             -GOAL_HALF_Z + 0.3,
             GOAL_HALF_Z - 0.3,
           );
@@ -659,6 +709,7 @@ export default function WorldCupFinal() {
                   ? "Argentina take the trophy."
                   : "The final ends level.",
             shotCharge: 0,
+            possession: "loose",
           }));
         };
         const scoreGoal = (team: Team) => {
@@ -679,6 +730,7 @@ export default function WorldCupFinal() {
             spain: scores.spain,
             argentina: scores.argentina,
             status: team === "spain" ? "GOAL SPAIN!" : "GOAL ARGENTINA!",
+            possession: "loose",
           }));
           if (extraTime) {
             later(() => finishMatch(team), 1550);
@@ -706,15 +758,12 @@ export default function WorldCupFinal() {
             winner: null,
             status: "Kick-off — Spain attack to the right",
             shotCharge: 0,
+            possession: "spain",
           }));
         };
 
         const updateUser = (delta: number) => {
-          const direction = new THREE.Vector3(
-            (held.has("up") ? 1 : 0) - (held.has("down") ? 1 : 0),
-            0,
-            (held.has("right") ? 1 : 0) - (held.has("left") ? 1 : 0),
-          );
+          const direction = readInputDirection();
           if (direction.lengthSq() > 0) {
             direction.normalize();
             const speed = held.has("sprint") ? 6.1 : 4.45;
@@ -760,6 +809,23 @@ export default function WorldCupFinal() {
                   lane.z = THREE.MathUtils.clamp(player.root.position.z * 0.72, -6.8, 6.8);
                   moveToward(player, lane, 3.7, delta);
                 }
+              } else if (
+                ballOwner &&
+                ballOwner.team === team
+              ) {
+                const attackSign = team === "spain" ? 1 : -1;
+                const target = player.home.clone();
+                target.x = THREE.MathUtils.clamp(
+                  ballOwner.root.position.x + attackSign * (3.2 + Math.abs(player.home.z) * 0.16),
+                  -12.8,
+                  12.8,
+                );
+                target.z = THREE.MathUtils.clamp(
+                  player.home.z * 0.78 + ballOwner.root.position.z * 0.22,
+                  -8.9,
+                  8.9,
+                );
+                moveToward(player, target, 3.55, delta);
               } else if (
                 ballOwner &&
                 ballOwner.team !== team &&
@@ -913,10 +979,21 @@ export default function WorldCupFinal() {
         };
         const switchPlayer = () => {
           if (phase !== "playing") return;
+          if (ballOwner?.team === "spain" && ballOwner.role === "outfield") {
+            controlled.velocity.set(0, 0, 0);
+            controlled = ballOwner;
+            setUi((value) => ({
+              ...value,
+              activePlayer: controlled.number,
+              status: `On the ball · Spain #${controlled.number}`,
+            }));
+            return;
+          }
+          const defensiveTarget = ballOwner?.root.position ?? ball.position;
           const options = [...spain].sort(
             (a, b) =>
-              a.root.position.distanceToSquared(ball.position) -
-              b.root.position.distanceToSquared(ball.position),
+              a.root.position.distanceToSquared(defensiveTarget) -
+              b.root.position.distanceToSquared(defensiveTarget),
           );
           const next = options.find((player) => player !== controlled) ?? options[0];
           controlled.velocity.set(0, 0, 0);
@@ -950,6 +1027,7 @@ export default function WorldCupFinal() {
             }
           },
           pass: () => passBall(controlled),
+          throughPass: () => passBall(controlled, true),
           tackle: () => tackle(controlled),
           switchPlayer,
         };
@@ -976,6 +1054,7 @@ export default function WorldCupFinal() {
           }
           if (event.repeat) return;
           if (key === "j") passBall(controlled);
+          if (key === "i") passBall(controlled, true);
           if (key === "l") tackle(controlled);
           if (key === "q") switchPlayer();
           if (new URLSearchParams(location.search).has("qa")) {
@@ -1078,17 +1157,17 @@ export default function WorldCupFinal() {
           const focus =
             phase === "finished"
               ? new THREE.Vector3(0, 1.2, 0)
-              : controlled.root.position.clone().lerp(ball.position, 0.48);
+              : ball.position.clone().lerp(controlled.root.position, 0.22);
           cameraTarget.lerp(focus, 1 - Math.exp(-delta * 3.2));
           if (phase === "finished") {
             desiredCamera.set(-9.5, 9.7, 14);
           } else if (phase === "menu") {
-            desiredCamera.set(-16, 20, 29);
+            desiredCamera.set(-3, 20, 25.5);
           } else {
             desiredCamera.set(
-              THREE.MathUtils.clamp(cameraTarget.x - 8.7, -18, 2.5),
-              12.4,
-              THREE.MathUtils.clamp(cameraTarget.z + 12.2, 9.5, 14.8),
+              THREE.MathUtils.clamp(cameraTarget.x * 0.28 - 0.75, -4.5, 4),
+              18.5,
+              24.5,
             );
           }
           camera.position.lerp(desiredCamera, 1 - Math.exp(-delta * 2.4));
@@ -1165,7 +1244,10 @@ export default function WorldCupFinal() {
           <button className="final-sound" onClick={() => controllerRef.current?.toggleSound()}>
             {ui.sound ? "SOUND ON" : "SOUND OFF"}
           </button>
-          <div className="final-active">ACTIVE · SPAIN #{ui.activePlayer}</div>
+          <div className="final-active">
+            ACTIVE · SPAIN #{ui.activePlayer} ·{" "}
+            {ui.possession === "loose" ? "LOOSE BALL" : `${ui.possession.toUpperCase()} BALL`}
+          </div>
           <div className="final-charge" aria-label={`Shot power ${Math.round(ui.shotCharge * 100)} percent`}>
             <span style={{ width: `${Math.round(ui.shotCharge * 100)}%` }} />
           </div>
@@ -1180,6 +1262,7 @@ export default function WorldCupFinal() {
             <div className="final-actions">
               <button className="switch" onClick={() => controllerRef.current?.switchPlayer()}>SWITCH<small>Q</small></button>
               <button className="pass" onClick={() => controllerRef.current?.pass()}>PASS<small>J</small></button>
+              <button className="through" onClick={() => controllerRef.current?.throughPass()}>THROUGH<small>I</small></button>
               <button className="tackle" onClick={() => controllerRef.current?.tackle()}>TACKLE<small>L</small></button>
               <button className="shoot" {...holdProps("shoot")}>SHOOT<small>HOLD K</small></button>
             </div>
@@ -1210,7 +1293,7 @@ export default function WorldCupFinal() {
           <button className="final-primary" onClick={() => controllerRef.current?.start()}>
             PLAY THE FINAL
           </button>
-          <p className="final-keys">WASD / ARROWS MOVE · SHIFT SPRINT · J PASS · HOLD K SHOOT · L TACKLE · Q SWITCH</p>
+          <p className="final-keys">WASD / ARROWS MOVE · SHIFT SPRINT · J PASS · I THROUGH BALL · HOLD K SHOOT · L TACKLE · Q SWITCH</p>
         </section>
       )}
 

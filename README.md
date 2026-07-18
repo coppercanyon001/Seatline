@@ -12,11 +12,15 @@ animation playback, collision checks, camera work, AI, and game logic.
 
 - Move with `WASD` or the arrow keys; hold `Shift` to sprint.
 - Press `J` to pass and switch to the receiver.
+- Press `I` for an assisted through ball into attacking space.
 - Hold `K` or `Space` to charge a shot, then release.
 - Press `L` to tackle and `Q` to switch Spain players.
 - Play a 150-second final; a draw goes to golden goal.
-- Play inside a two-ring Mint stadium with 74 animated Spain and Argentina
-  supporters who all cheer whenever either team scores.
+- Use a wide, gently tracking broadcast camera with support runs, assisted
+  passing, contextual player switching, and a live possession readout.
+- Play inside a large crowdless Mint stadium populated exclusively by 162
+  seated clones from a four-person supporter cast. Every fan performs a seated
+  cheer whenever either team scores.
 - Track a compact classic black-and-white Mint football between correctly
   oriented goals.
 - Use the touch-sized movement and action controls on mobile.
@@ -71,8 +75,9 @@ outputs/world-cup-final-capture-checklist.md
 ## Tutorial Pack
 
 The `outputs/` folder contains a live production diary, a finished step-by-step
-tutorial, a narration script, a video capture checklist, nine Mint asset
-previews, and eight final browser screenshots.
+tutorial, a narration script, a video capture checklist, eleven Mint asset
+previews, and twelve browser screenshots covering both accepted and pivoted
+production stages.
 
 ## Open-Source Gaming Notes
 

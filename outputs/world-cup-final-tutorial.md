@@ -258,12 +258,44 @@ front posts. Each goal should open toward the pitch while the net volume extends
 behind the goal line. Rotating both goal instances 180 degrees corrected that
 relationship.
 
-The finished crowd uses 74 clones of the accepted rigged Mint outfield
-characters. Three rows line both long stands and two rows sit behind both goals.
-Every clone owns an animation mixer, starts with the accepted idle clip, and
-crossfades to the accepted victory clip when the scoring event fires. Routing
-that event to `"all"` keeps the implementation simple and produces the requested
-whole-stadium celebration.
+The first full-crowd pass used 74 clones of the accepted outfield rigs. It
+proved the event routing, but it did not satisfy the final art direction:
+supporters needed their own identities, every motion needed to stay seated, and
+the grandstand could not contain baked people.
+
+The production crowd therefore uses four new fan rigs and 162 runtime clones.
+Three rows fill each long grandstand and two rows fill both ends. Every clone
+owns an animation mixer, starts with its fan-specific seated idle clip, and
+crossfades to a varied seated celebration when the scoring event fires. Routing
+that event to `"all"` produces the requested whole-stadium reaction without
+ever switching to a standing clip.
+
+## Final Revision: Crowdless Architecture and Broadcast Mechanics
+
+The old stand assets were single meshes with old spectators baked into their
+geometry. They could not be cleaned in Three.js without violating the
+Mint-only world rule, so Mint generated matching empty straight and corner
+grandstands. This is a useful production lesson: if an unwanted element is
+inseparable from an authored asset, replace the asset family instead of hiding
+the problem with more layers.
+
+The final camera follows the reference at a realistic broadcast scale. A
+42-degree field of view, elevated sideline position, and reduced X tracking
+keep almost the whole pitch visible while still following the phase of play.
+The near grandstand sits behind the camera so its canopy never blocks the
+field; the far and end sections remain visible and filled with the seated cast.
+
+The football mechanics now include assisted passes, led through balls on `I`,
+support runs, contextual switching, and a possession indicator. These are
+original systems built for this game; the goal is a familiar broadcast-football
+rhythm without copying proprietary interface or assets.
+
+Final captures:
+
+- `outputs/world-cup-final-tutorial-assets/20-empty-straight-stand-preview.webp`
+- `outputs/world-cup-final-tutorial-assets/21-empty-corner-stand-preview.webp`
+- `outputs/world-cup-final-tutorial-assets/22-final-wide-empty-stands-seated-crowd.png`
+- `outputs/world-cup-final-tutorial-assets/23-final-all-fans-seated-cheer.png`
 
 ## Reusable Lessons
 
