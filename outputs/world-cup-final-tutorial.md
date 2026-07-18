@@ -219,6 +219,27 @@ The four final screenshots are:
 - `outputs/world-cup-final-tutorial-assets/11-goal-spain.png`
 - `outputs/world-cup-final-tutorial-assets/12-spain-champions.png`
 
+Two revision screenshots record the grounding and stadium correction:
+
+- `outputs/world-cup-final-tutorial-assets/13-grounded-expanded-stadium.png`
+- `outputs/world-cup-final-tutorial-assets/14-goal-crowd-cheer.png`
+
+## Revision Lesson: Ground to the Surface, Not the Origin
+
+The Mint pitch is a thick slab. Scaling it to field width made the slab roughly
+1.4 game units tall, but the first runtime treated its bottom as the playing
+surface. Players and the football were therefore buried.
+
+The corrected runtime measures `Box3.max.y` after the pitch is scaled and
+positioned, then derives the player and ball baselines from that measured top.
+This is more reliable than a hand-tuned lift and automatically follows future
+pitch scale changes.
+
+The stadium revision also uses two rings of the accepted Mint stand modules.
+The inner ring remains flush with the pitch edge and the outer ring supplies
+the larger bowl. Twenty rigged Mint player clones occupy the seating and switch
+from idle to their accepted victory clip when their team wins.
+
 ## Reusable Lessons
 
 - Lock the game and asset contract before generation.

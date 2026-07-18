@@ -86,14 +86,24 @@ No runtime path references a partial, failed, or rejected pass.
 - Desktop browser QA loaded every asset, rendered WebGL, exercised menu,
   passing, goal, golden-goal, victory, and rematch states, and reported no
   runtime errors.
+- The grounding revision measured the scaled pitch slab's actual top bound at
+  runtime and uses that value for every player, goalkeeper, goal, flag, trophy,
+  and ball baseline. Browser screenshots confirm complete legs and feet remain
+  above the turf during play.
+- Twenty additional rigged Mint outfield clones are placed as Spain and
+  Argentina supporters in the stands. They use the accepted idle and victory
+  clips and cheer for their team on goals and match wins.
 
 ## Runtime Layout
 
-- Shared pitch surface baseline: `Y = 0`.
+- Shared pitch surface baseline: the measured top bound of the scaled Mint pitch
+  slab, rather than the slab's bottom or imported origin.
 - Playable bounds: approximately `X ±15`, `Z ±10.8`.
 - Spain attacks toward positive X; Argentina attacks toward negative X.
 - Character gameplay roots move deterministically in XZ.
 - The Mint football remains a separate mesh and is attached, passed, shot,
   bounced, saved, and scored by the gameplay simulation.
 - Stadium stands are reused instances from the accepted compatible Mint family.
+- The stadium uses a flush inner bowl plus a second outer ring of compatible
+  Mint straight and corner modules.
 - Trophy and confetti are accepted Mint props revealed only for Spain's win.

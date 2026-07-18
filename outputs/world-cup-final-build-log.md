@@ -249,3 +249,32 @@ Playable game:
 
 The existing Sites address retains its original slug, while the site title and
 the game's page metadata now read **Final Whistle: Spain vs Argentina**.
+
+## Chapter 12 — Grounding, Ball Readability, and Stadium Scale Revision
+
+The first published version revealed that the players and ball were positioned
+against `Y = 0`, which was the bottom of the Mint pitch slab rather than its
+visible top. The scaled slab is approximately 1.4 world units thick, explaining
+why legs and the football were buried.
+
+The revision now:
+
+- measures the Mint pitch's top bound after scaling;
+- anchors every gameplay player and goalkeeper to that surface;
+- anchors the ball, goals, flags, trophy, and confetti to the same baseline;
+- enlarges the Mint football and gives it a restrained tracking light;
+- expands the stadium into a flush inner bowl and second outer ring;
+- adds 20 rigged Mint Spain and Argentina supporters to the seating;
+- routes accepted idle and victory clips so the winning supporters cheer.
+
+The first enlarged-bowl screenshot exposed a dark gap between the pitch and
+stands. The inner ring was moved flush with the pitch while the outer ring was
+kept for scale.
+
+New browser captures:
+
+- `13-grounded-expanded-stadium.png`
+- `14-goal-crowd-cheer.png`
+
+Browser QA confirmed visible feet, a readable ball, goal scoring, victory state,
+and no runtime errors.

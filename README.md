@@ -15,6 +15,8 @@ animation playback, collision checks, camera work, AI, and game logic.
 - Hold `K` or `Space` to charge a shot, then release.
 - Press `L` to tackle and `Q` to switch Spain players.
 - Play a 150-second final; a draw goes to golden goal.
+- Play inside a two-ring Mint stadium with animated Spain and Argentina
+  supporters who cheer their team's goals and win.
 - Use the touch-sized movement and action controls on mobile.
 
 ## Mint Asset Policy

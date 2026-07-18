@@ -40,6 +40,8 @@ previews and four final browser captures:
 - `10-live-match.png`
 - `11-goal-spain.png`
 - `12-spain-champions.png`
+- `13-grounded-expanded-stadium.png`
+- `14-goal-crowd-cheer.png`
 
 ## Deterministic Capture Route
 
