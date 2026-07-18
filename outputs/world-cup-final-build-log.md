@@ -278,3 +278,36 @@ New browser captures:
 
 Browser QA confirmed visible feet, a readable ball, goal scoring, victory state,
 and no runtime errors.
+
+## Chapter 13 — Classic Ball, Goal Orientation, and Full-Crowd Cheer
+
+The next visual review found three specific readability problems: the football
+was too large and too colorful, the goal nets extended into the pitch, and the
+stands needed to feel fully populated.
+
+Mint generated a replacement classic football in
+[this asset chat](https://mint.gg/chat/ph7cs7g4v4xhyycsjzkdqr2xch8asans).
+Its inspected preview has a white leather surface with black panels and no
+logos, text, or accent colors. The valid 842,968-byte GLB replaced the original
+candy-gold ball at the existing runtime path, and its gameplay scale was reduced
+from `0.68` to `0.46`.
+
+The two Mint goal instances were rotated 180 degrees so each frame still opens
+toward the field while its net depth extends outside the playing area.
+
+The crowd layout grew from 20 to 74 rigged Mint-character clones:
+
+- three seating rows along each touchline;
+- two seating rows behind each goal;
+- accepted idle animation during play;
+- accepted victory animation on every spectator after either team scores.
+
+New production captures:
+
+- `15-classic-ball-preview.webp`
+- `16-small-classic-ball-correct-goals.png`
+- `17-full-crowd-goal-cheer.png`
+
+The final browser pass confirmed the compact black-and-white ball, corrected
+goal orientation, populated four-sided stands, a score-triggered crowd state,
+and zero console errors.

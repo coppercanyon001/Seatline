@@ -33,8 +33,8 @@ Production URL:
 
 ## Existing Capture Assets
 
-The folder `outputs/world-cup-final-tutorial-assets/` contains eight Mint asset
-previews and four final browser captures:
+The folder `outputs/world-cup-final-tutorial-assets/` contains nine Mint asset
+previews and eight final browser captures:
 
 - `09-final-menu.png`
 - `10-live-match.png`
@@ -42,6 +42,9 @@ previews and four final browser captures:
 - `12-spain-champions.png`
 - `13-grounded-expanded-stadium.png`
 - `14-goal-crowd-cheer.png`
+- `15-classic-ball-preview.webp`
+- `16-small-classic-ball-correct-goals.png`
+- `17-full-crowd-goal-cheer.png`
 
 ## Deterministic Capture Route
 

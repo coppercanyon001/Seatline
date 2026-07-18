@@ -283,11 +283,11 @@ export default function WorldCupFinal() {
 
         const leftGoal = fitHeight(sourceScene(ASSETS.world.goal), 2.45);
         leftGoal.position.set(-15.05, pitchSurfaceY, 0);
-        leftGoal.rotation.y = Math.PI / 2;
+        leftGoal.rotation.y = -Math.PI / 2;
         stadium.add(leftGoal);
         const rightGoal = fitHeight(sourceScene(ASSETS.world.goal), 2.45);
         rightGoal.position.set(15.05, pitchSurfaceY, 0);
-        rightGoal.rotation.y = -Math.PI / 2;
+        rightGoal.rotation.y = Math.PI / 2;
         stadium.add(rightGoal);
 
         for (const [x, z, rotation] of [
@@ -424,31 +424,44 @@ export default function WorldCupFinal() {
           actions.idle.reset().play();
           spectators.push({ team, root, mixer, actions, currentAction: "idle" });
         };
-        const supporterXs = [-18, -12, -6, 0, 6, 12, 18];
-        supporterXs.forEach((x, index) => {
-          const team: Team = index % 2 === 0 ? "spain" : "argentina";
-          const rowLift = index % 3 === 0 ? 4.55 : 3.35;
-          createSpectator(team, x, rowLift, -14.15, 0, 1.42);
-          createSpectator(
-            team === "spain" ? "argentina" : "spain",
-            x,
-            rowLift,
-            14.15,
-            Math.PI,
-            1.42,
-          );
+        const supporterXs = [-24, -18, -12, -6, 0, 6, 12, 18, 24];
+        const sideRows = [
+          { z: 12.45, y: 2.35, height: 1.16 },
+          { z: 14.1, y: 3.55, height: 1.2 },
+          { z: 15.75, y: 4.75, height: 1.24 },
+        ] as const;
+        sideRows.forEach((row, rowIndex) => {
+          supporterXs.forEach((x, index) => {
+            const team: Team = (index + rowIndex) % 2 === 0 ? "spain" : "argentina";
+            createSpectator(team, x, row.y, -row.z, 0, row.height);
+            createSpectator(
+              team === "spain" ? "argentina" : "spain",
+              x,
+              row.y,
+              row.z,
+              Math.PI,
+              row.height,
+            );
+          });
         });
-        [-7.2, 0, 7.2].forEach((z, index) => {
-          const team: Team = index % 2 === 0 ? "spain" : "argentina";
-          createSpectator(team, -18.65, 3.55, z, Math.PI / 2, 1.38);
-          createSpectator(
-            team === "spain" ? "argentina" : "spain",
-            18.65,
-            3.55,
-            z,
-            -Math.PI / 2,
-            1.38,
-          );
+        const endSupporterZs = [-8, -4, 0, 4, 8];
+        const endRows = [
+          { x: 18.15, y: 2.4, height: 1.16 },
+          { x: 20.15, y: 4.05, height: 1.22 },
+        ] as const;
+        endRows.forEach((row, rowIndex) => {
+          endSupporterZs.forEach((z, index) => {
+            const team: Team = (index + rowIndex) % 2 === 0 ? "spain" : "argentina";
+            createSpectator(team, -row.x, row.y, z, Math.PI / 2, row.height);
+            createSpectator(
+              team === "spain" ? "argentina" : "spain",
+              row.x,
+              row.y,
+              z,
+              -Math.PI / 2,
+              row.height,
+            );
+          });
         });
         const playSpectatorAction = (spectator: Spectator, name: "idle" | "victory") => {
           if (spectator.currentAction === name) return;
@@ -456,14 +469,17 @@ export default function WorldCupFinal() {
           spectator.actions[spectator.currentAction]?.fadeOut(0.18);
           spectator.currentAction = name;
         };
-        const setSpectatorMood = (winner: Team | null) => {
+        const setSpectatorMood = (winner: Team | "all" | null) => {
           spectators.forEach((spectator) => {
-            const action = winner && spectator.team === winner ? "victory" : "idle";
+            const action =
+              winner && (winner === "all" || spectator.team === winner)
+                ? "victory"
+                : "idle";
             playSpectatorAction(spectator, action);
           });
         };
 
-        const ball = fitLargest(sourceScene(ASSETS.world.football), 0.68);
+        const ball = fitLargest(sourceScene(ASSETS.world.football), 0.46);
         ball.position.set(0, ballGroundY, 0);
         scene.add(ball);
         const ballLight = new THREE.PointLight(0xffefaa, 1.35, 5.5, 2);
@@ -624,7 +640,7 @@ export default function WorldCupFinal() {
           ballOwner = null;
           held.clear();
           celebrationRoot.visible = winner === "spain";
-          setSpectatorMood(winner === "draw" ? null : winner);
+          setSpectatorMood(winner === "draw" ? null : "all");
           players.forEach((player) => {
             player.velocity.set(0, 0, 0);
             if (player.team === winner) playAction(player, "victory", true);
@@ -653,7 +669,7 @@ export default function WorldCupFinal() {
           ballOwner = null;
           ballVelocity.set(0, 0, 0);
           playSound("goal");
-          setSpectatorMood(team);
+          setSpectatorMood("all");
           players
             .filter((player) => player.team === team && player.role === "outfield")
             .forEach((player) => playAction(player, "victory", true));

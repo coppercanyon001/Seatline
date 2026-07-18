@@ -224,6 +224,12 @@ Two revision screenshots record the grounding and stadium correction:
 - `outputs/world-cup-final-tutorial-assets/13-grounded-expanded-stadium.png`
 - `outputs/world-cup-final-tutorial-assets/14-goal-crowd-cheer.png`
 
+The final refinement assets record the ball replacement and full crowd:
+
+- `outputs/world-cup-final-tutorial-assets/15-classic-ball-preview.webp`
+- `outputs/world-cup-final-tutorial-assets/16-small-classic-ball-correct-goals.png`
+- `outputs/world-cup-final-tutorial-assets/17-full-crowd-goal-cheer.png`
+
 ## Revision Lesson: Ground to the Surface, Not the Origin
 
 The Mint pitch is a thick slab. Scaling it to field width made the slab roughly
@@ -237,8 +243,27 @@ pitch scale changes.
 
 The stadium revision also uses two rings of the accepted Mint stand modules.
 The inner ring remains flush with the pitch edge and the outer ring supplies
-the larger bowl. Twenty rigged Mint player clones occupy the seating and switch
-from idle to their accepted victory clip when their team wins.
+the larger bowl.
+
+## Revision Lesson: Readability and Event-Wide Animation
+
+A gameplay prop can be structurally valid and still communicate the wrong
+thing. The original candy-gold ball read as an oversized fantasy object, so a
+new Mint pass produced a visually explicit white-and-black football. Keeping
+the same semantic runtime path made the replacement low risk; reducing the
+runtime scale completed the readability fix.
+
+Goal direction is easiest to review by looking at the net depth, not only the
+front posts. Each goal should open toward the pitch while the net volume extends
+behind the goal line. Rotating both goal instances 180 degrees corrected that
+relationship.
+
+The finished crowd uses 74 clones of the accepted rigged Mint outfield
+characters. Three rows line both long stands and two rows sit behind both goals.
+Every clone owns an animation mixer, starts with the accepted idle clip, and
+crossfades to the accepted victory clip when the scoring event fires. Routing
+that event to `"all"` keeps the implementation simple and produces the requested
+whole-stadium celebration.
 
 ## Reusable Lessons
 

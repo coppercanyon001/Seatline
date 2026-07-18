@@ -45,7 +45,8 @@ procedural world geometry is used.
 | Family | Mint source | Local artifacts | Status |
 | --- | --- | --- | --- |
 | Solid stadium kit | [Mint chat](https://mint.gg/chat/ph74x6mhqdn6pe9a6hqytkdvrx8asjdk) | `public/models/world-cup-final/pitch.glb`, `straight-stand.glb`, `corner-stand.glb`, `goal.glb` | Accepted |
-| Match props | [Mint chat](https://mint.gg/chat/ph72h5kerwdw0nzdfnwe2a75fh8arvrg) | `football.glb`, `corner-flag.glb`, `trophy.glb`, `confetti.glb` | Accepted |
+| Match props | [Mint chat](https://mint.gg/chat/ph72h5kerwdw0nzdfnwe2a75fh8arvrg) | `corner-flag.glb`, `trophy.glb`, `confetti.glb` | Accepted |
+| Classic match ball replacement | [Mint chat](https://mint.gg/chat/ph7cs7g4v4xhyycsjzkdqr2xch8asans) | `public/models/world-cup-final/football.glb` | Accepted |
 | Outfield roster | [Mint chat](https://mint.gg/chat/ph797348b0e47k2hstbtrz19fd8asama) | `players/spain-outfield.glb`, `players/argentina-outfield.glb` | Accepted |
 | Goalkeeper roster | [Mint chat](https://mint.gg/chat/ph7bhc6jvfkaemc0vpxvbpx31n8arjb9) | `players/spain-goalkeeper.glb`, `players/argentina-goalkeeper.glb` | Accepted |
 | Outfield animation pass | Mint animation catalog batch | Six clips per outfield rig: idle, run, kick, tackle, hit, victory | Accepted |
@@ -61,6 +62,7 @@ The authoritative code map is `app/worldCupMintAssets.ts`.
 | Ten-item stadium and prop batch | [Mint chat](https://mint.gg/chat/ph73v3p1xj6saec33ydvrjvgy18arxaa) | Seven items failed. The whole partial pass was discarded. |
 | Four-character roster batch | [Mint chat](https://mint.gg/chat/ph7783fe4atx20mvnhnhkn3tvd8ar2v1) | Final generation failed. The complete pass was discarded. |
 | Stadium splat experiment | [Mint chat](https://mint.gg/chat/ph781qq61mpygb3a7jrvgba13h8ara97) | Rejected before approval because the preview could not be inspected. |
+| Original candy-gold football | [Mint chat](https://mint.gg/chat/ph72h5kerwdw0nzdfnwe2a75fh8arvrg) | Superseded by a smaller, visually unambiguous black-and-white match ball. |
 
 No runtime path references a partial, failed, or rejected pass.
 
@@ -90,9 +92,16 @@ No runtime path references a partial, failed, or rejected pass.
   runtime and uses that value for every player, goalkeeper, goal, flag, trophy,
   and ball baseline. Browser screenshots confirm complete legs and feet remain
   above the turf during play.
-- Twenty additional rigged Mint outfield clones are placed as Spain and
-  Argentina supporters in the stands. They use the accepted idle and victory
-  clips and cheer for their team on goals and match wins.
+- The replacement classic football is a valid 842,968-byte GLB with one mesh,
+  one material, three textures, nonzero bounds, and a visually inspected white
+  surface with black panels.
+- Seventy-four additional rigged Mint outfield clones fill three rows along
+  both touchlines and two rows behind both goals. They use the accepted idle
+  and victory clips; every spectator transitions into the cheer animation
+  whenever either team scores.
+- Browser QA confirmed the smaller classic ball, outward-facing net depth on
+  both goals, the full four-sided crowd, score-triggered cheering, and zero
+  console errors.
 
 ## Runtime Layout
 
@@ -101,8 +110,10 @@ No runtime path references a partial, failed, or rejected pass.
 - Playable bounds: approximately `X ±15`, `Z ±10.8`.
 - Spain attacks toward positive X; Argentina attacks toward negative X.
 - Character gameplay roots move deterministically in XZ.
-- The Mint football remains a separate mesh and is attached, passed, shot,
-  bounced, saved, and scored by the gameplay simulation.
+- The smaller black-and-white Mint football remains a separate mesh and is
+  attached, passed, shot, bounced, saved, and scored by the gameplay simulation.
+- Both goal assets face into the pitch so their net depth extends outside the
+  field of play.
 - Stadium stands are reused instances from the accepted compatible Mint family.
 - The stadium uses a flush inner bowl plus a second outer ring of compatible
   Mint straight and corner modules.

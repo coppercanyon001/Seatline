@@ -15,8 +15,10 @@ animation playback, collision checks, camera work, AI, and game logic.
 - Hold `K` or `Space` to charge a shot, then release.
 - Press `L` to tackle and `Q` to switch Spain players.
 - Play a 150-second final; a draw goes to golden goal.
-- Play inside a two-ring Mint stadium with animated Spain and Argentina
-  supporters who cheer their team's goals and win.
+- Play inside a two-ring Mint stadium with 74 animated Spain and Argentina
+  supporters who all cheer whenever either team scores.
+- Track a compact classic black-and-white Mint football between correctly
+  oriented goals.
 - Use the touch-sized movement and action controls on mobile.
 
 ## Mint Asset Policy
@@ -69,8 +71,8 @@ outputs/world-cup-final-capture-checklist.md
 ## Tutorial Pack
 
 The `outputs/` folder contains a live production diary, a finished step-by-step
-tutorial, a narration script, a video capture checklist, eight Mint asset
-previews, and four final browser screenshots.
+tutorial, a narration script, a video capture checklist, nine Mint asset
+previews, and eight final browser screenshots.
 
 ## Open-Source Gaming Notes
 
