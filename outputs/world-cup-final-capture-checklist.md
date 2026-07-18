@@ -28,6 +28,9 @@
 - [ ] Build-log entries for the splat pivot and failed batches.
 - [ ] Final deployed URL.
 
+Production URL:
+<https://grandmas-grocery-trip.mrpopper.chatgpt.site>
+
 ## Existing Capture Assets
 
 The folder `outputs/world-cup-final-tutorial-assets/` contains eight Mint asset

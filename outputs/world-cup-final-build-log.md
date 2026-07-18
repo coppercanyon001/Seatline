@@ -239,6 +239,13 @@ Saved tutorial captures:
 These are stored in `outputs/world-cup-final-tutorial-assets/` with the eight
 Mint asset-preview images captured earlier.
 
-## Remaining Recorded Chapter
+## Chapter 11 — Publish the Validated Build
 
-- publish the production build and record the final playable link.
+The exact validated source was committed, pushed, packaged from a clean
+worktree, saved as a production version, and deployed privately.
+
+Playable game:
+<https://grandmas-grocery-trip.mrpopper.chatgpt.site>
+
+The existing Sites address retains its original slug, while the site title and
+the game's page metadata now read **Final Whistle: Spain vs Argentina**.

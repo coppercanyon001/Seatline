@@ -228,3 +228,9 @@ The four final screenshots are:
 - Neutralize animation drift at the clip layer, not with position hacks.
 - Compose the environment from the gameplay camera.
 - Capture every failed route; those decisions are often the best tutorial.
+
+## Play the Finished Game
+
+The validated production build is available at:
+
+<https://grandmas-grocery-trip.mrpopper.chatgpt.site>
