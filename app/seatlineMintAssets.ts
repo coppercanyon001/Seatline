@@ -2,11 +2,10 @@ export const SEATLINE_MINT_ASSETS = {
   shells: {
     monument: "/models/seatline/monument-imax-shell.glb",
     midtown: "/models/seatline/midtown-grand-shell.glb",
-    brooklyn: "/models/seatline/brooklyn-table-shell.glb",
   },
   screens: {
     imax: "/models/seatline/imax-screen.glb",
-    wide: "/models/seatline/wide-screen.glb",
+    wide: "/models/seatline/imax-screen.glb",
   },
   chairs: {
     cinema: "/models/seatline/cinema-recliner.glb",

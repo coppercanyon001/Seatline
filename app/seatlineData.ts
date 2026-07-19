@@ -152,7 +152,7 @@ export const THEATERS: Theater[] = [
     distance: "3.4 mi",
     sourceUrl:
       "https://drafthouse.com/nyc/theater/downtown-brooklyn",
-    shell: "brooklyn",
+    shell: "midtown",
     screen: "wide",
     chair: "dineIn",
     rows: 7,

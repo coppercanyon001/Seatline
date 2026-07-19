@@ -71,6 +71,10 @@ function TheaterPreview({
         renderer.toneMappingExposure = 0.94;
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFShadowMap;
+        const screenPlaneZ =
+          theater.screen === "wide"
+            ? theater.baseZ - 1.25
+            : theater.screenZ + 0.12;
 
         scene.add(new THREE.AmbientLight(0x5c6a91, 0.7));
         const screenGlow = new THREE.PointLight(
@@ -91,14 +95,21 @@ function TheaterPreview({
         scene.add(rimLight);
 
         const loader = new GLTFLoader();
-        const [shellGltf, screenGltf, chairGltf, beaconGltf] =
+        const [shellGltf, screenGltf, chairGltf, beaconGltf, screenTexture] =
           await Promise.all([
             loader.loadAsync(ASSETS.shells[theater.shell]),
             loader.loadAsync(ASSETS.screens[theater.screen]),
             loader.loadAsync(ASSETS.chairs[theater.chair]),
             loader.loadAsync(ASSETS.fixtures.aisleBeacon),
+            new THREE.TextureLoader().loadAsync(ASSETS.images.mythicSea),
           ]);
         if (disposed) return;
+        screenTexture.colorSpace = THREE.SRGBColorSpace;
+        screenTexture.wrapS = THREE.ClampToEdgeWrapping;
+        screenTexture.wrapT = THREE.ClampToEdgeWrapping;
+        screenTexture.magFilter = THREE.LinearFilter;
+        screenTexture.minFilter = THREE.LinearMipmapLinearFilter;
+        screenTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
 
         const prepare = (object: import("three").Object3D) => {
           object.traverse((child) => {
@@ -152,16 +163,47 @@ function TheaterPreview({
         };
 
         const screen = fitWidth(screenGltf.scene, theater.screenWidth);
-        screen.position.set(0, 0.16, theater.screenZ);
+        if (theater.screen === "wide") screen.scale.y = 0.72;
+        screen.scale.z = 0.08;
+        screen.position.set(0, 0.16, screenPlaneZ);
         screen.traverse((child) => {
           const mesh = child as import("three").Mesh;
           if (!mesh.isMesh) return;
+          mesh.geometry = mesh.geometry.clone();
+          const position = mesh.geometry.getAttribute("position");
+          const bounds = new THREE.Box3().setFromBufferAttribute(
+            position as import("three").BufferAttribute,
+          );
+          const width = Math.max(bounds.max.x - bounds.min.x, 0.001);
+          const height = Math.max(bounds.max.y - bounds.min.y, 0.001);
+          const planarUv = new Float32Array(position.count * 2);
+          for (let index = 0; index < position.count; index += 1) {
+            planarUv[index * 2] = (position.getX(index) - bounds.min.x) / width;
+            planarUv[index * 2 + 1] =
+              (position.getY(index) - bounds.min.y) / height;
+          }
+          mesh.geometry.setAttribute(
+            "uv",
+            new THREE.BufferAttribute(planarUv, 2),
+          );
+          mesh.castShadow = false;
+          mesh.receiveShadow = false;
+
           const original = Array.isArray(mesh.material)
             ? mesh.material[0]
             : mesh.material;
           const material = (original as import("three").MeshStandardMaterial).clone();
-          material.emissive = new THREE.Color(0x9bb8e9);
-          material.emissiveIntensity = 0.22;
+          material.color.set(0x000000);
+          material.map = null;
+          material.emissive = new THREE.Color(0xffffff);
+          material.emissiveMap = screenTexture;
+          material.emissiveIntensity = 0.88;
+          material.normalMap = null;
+          material.metalnessMap = null;
+          material.roughnessMap = null;
+          material.metalness = 0;
+          material.roughness = 0.92;
+          material.side = THREE.DoubleSide;
           material.needsUpdate = true;
           mesh.material = material;
         });
@@ -181,9 +223,11 @@ function TheaterPreview({
             child.userData.seatId = seat.id;
             child.userData.selectable = seat.status !== "occupied";
           });
-          if (seat.status === "occupied") {
-            chair.rotation.y = ((seat.columnIndex % 3) - 1) * 0.018;
-          }
+          const occupiedAngle =
+            seat.status === "occupied"
+              ? ((seat.columnIndex % 3) - 1) * 0.018
+              : 0;
+          chair.rotation.y = Math.PI + occupiedAngle;
           seatRoots.set(seat.id, chair);
           scene.add(chair);
         }
@@ -212,11 +256,11 @@ function TheaterPreview({
           setIsSeatView(false);
           targetPosition.set(
             0,
-            theater.roomHeight * 0.82,
-            theater.roomDepth * 0.45,
+            theater.roomHeight * 0.58,
+            theater.roomDepth * 0.3,
           );
-          targetLook.set(0, theater.screenWidth * 0.31, theater.screenZ + 1.5);
-          camera.fov = 52;
+          targetLook.set(0, theater.screenWidth * 0.24, screenPlaneZ);
+          camera.fov = 58;
           camera.updateProjectionMatrix();
           selectedLight.intensity = 0;
           if (instant) {
@@ -237,7 +281,7 @@ function TheaterPreview({
             seatPosition.y + (theater.screen === "imax" ? 1.88 : 1.68),
             seatPosition.z - 0.22,
           );
-          targetLook.set(0, theater.screenWidth * 0.31, theater.screenZ);
+          targetLook.set(0, theater.screenWidth * 0.31, screenPlaneZ);
           camera.fov = theater.screen === "imax" ? 72 : 66;
           camera.updateProjectionMatrix();
           selectedLight.position.set(
@@ -320,6 +364,7 @@ function TheaterPreview({
               : [mesh.material];
             materials.forEach((material) => material.dispose());
           });
+          screenTexture.dispose();
           renderer.dispose();
         };
       } catch (reason) {

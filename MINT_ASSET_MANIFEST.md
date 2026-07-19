@@ -55,9 +55,9 @@ front centered on `-Z`, screen opening centered on the front wall.
 | --- | --- | --- | --- |
 | Monument IMAX shell | Tall 1.43:1 opening, steep stepped risers, two aisles, no chairs or screen | `public/models/seatline/monument-imax-shell.glb` | Accepted |
 | Midtown Grand shell | Wide premium room, moderate rake, two aisles, no chairs or screen | `public/models/seatline/midtown-grand-shell.glb` | Accepted |
-| Brooklyn Table shell | Intimate dine-in room, shallow rake, center aisle, no chairs or tables | `public/models/seatline/brooklyn-table-shell.glb` | Accepted with authored blank-screen backdrop noted below |
+| Brooklyn Table shell | Intimate dine-in room, shallow rake, center aisle, no chairs or tables | `public/models/seatline/brooklyn-table-shell.glb` | Superseded: rejected in live camera QA because stray foreground geometry crossed the screen volume |
 | IMAX screen | Freestanding tall projection surface with satin-black frame | `public/models/seatline/imax-screen.glb` | Accepted |
-| Wide screen | Freestanding 1.90:1 projection surface with satin-black frame | `public/models/seatline/wide-screen.glb` | Accepted |
+| Wide screen | Freestanding 1.90:1 projection surface with satin-black frame | `public/models/seatline/wide-screen.glb` | Superseded: rejected after live QA exposed foreground/face corruption under the production camera |
 
 ### Seating and Fixture Pack
 
@@ -105,9 +105,18 @@ The authoritative semantic-to-local path map lives in
 | Original mythic sea tableau | [Mint chat](https://mint.gg/chat/ph75b3hd7v1yzr4bn3xth8mhz18avr6g) | Accepted after downloaded PNG inspection |
 
 The Brooklyn shell preview included an authored blank screen surface despite the
-request for an empty opening. The shell remained useful and coherent, so it was
-accepted as architecture. Runtime places the dedicated Mint wide-screen model
-slightly in front of that backdrop; the two surfaces are not coplanar.
+request for an empty opening. Recording-based layer isolation later confirmed
+that additional foreground fragments crossed the dedicated screen volume and
+could not be corrected with a safe depth offset. The shell is therefore
+superseded and absent from the runtime asset map. Brooklyn now reuses the
+validated Mint Midtown shell at its smaller room dimensions, with the distinct
+Mint dine-in chair family and Brooklyn seat layout preserved.
+
+The dedicated wide-screen export also produced block and triangle artifacts
+under multiple camera angles. RPX and dine-in rooms now reuse the validated
+Mint IMAX screen mesh, compressed vertically to the wide presentation ratio,
+with the same Mint mythic-sea artwork. The rejected wide-screen file remains
+local for provenance but is absent from the runtime asset map.
 
 ## Completed Structural Validation
 
@@ -123,6 +132,11 @@ slightly in front of that backdrop; the two surfaces are not coplanar.
   hard-coded seat rake. The production route rotates the coherent shell family
   once and samples the authored risers so chairs and eye points remain above
   the floor.
+- Recording-based QA superseded the Brooklyn shell after layer isolation proved
+  its foreground fragments were the source of persistent screen corruption.
+- The same QA pass superseded the wide-screen export and validated the
+  vertically scaled Mint IMAX screen as the clean production route for all
+  auditorium formats.
 
 ## Completed Runtime Validation
 
