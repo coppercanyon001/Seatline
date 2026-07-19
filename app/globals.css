@@ -109,6 +109,40 @@ button { font: inherit; touch-action: manipulation; }
 .final-sound { right: 18px; cursor: pointer; padding: 10px 14px; }
 .final-sound:hover { background: var(--gold); color: var(--ink); }
 .final-active { left: 18px; padding: 10px 14px; }
+.final-stamina {
+  position: absolute;
+  z-index: 6;
+  top: 61px;
+  left: 18px;
+  width: 154px;
+  padding: 8px 10px;
+  border: 2px solid rgba(255,255,255,.75);
+  border-radius: 12px;
+  background: rgba(7,17,38,.82);
+  color: white;
+  backdrop-filter: blur(8px);
+}
+.final-stamina small {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 7px;
+  font-weight: 950;
+  letter-spacing: .12em;
+}
+.final-stamina i {
+  display: block;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: rgba(255,255,255,.18);
+}
+.final-stamina span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #ff435c, var(--gold), #7df2b1);
+  transition: width .08s linear;
+}
 .final-charge {
   position: absolute;
   z-index: 5;
@@ -295,8 +329,7 @@ button { font: inherit; touch-action: manipulation; }
 }
 
 @media (pointer: fine) and (min-width: 900px) {
-  .final-dpad { opacity: .42; }
-  .final-actions { opacity: .7; }
+  .final-touch { display: none; }
 }
 
 @media (max-width: 760px) {
@@ -317,6 +350,8 @@ button { font: inherit; touch-action: manipulation; }
   .final-callout { top: 78px; max-width: 88vw; font-size: 9px; }
   .final-sound { top: 118px; right: 8px; padding: 7px 9px; font-size: 7px; }
   .final-active { top: 118px; left: 8px; padding: 7px 9px; font-size: 7px; }
+  .final-stamina { top: 151px; left: 8px; width: 128px; padding: 6px 8px; }
+  .final-stamina small { margin-bottom: 3px; font-size: 6px; }
   .final-charge { bottom: 142px; width: 150px; }
   .final-touch { right: 8px; bottom: 20px; left: 8px; }
   .final-dpad { width: 130px; height: 111px; }

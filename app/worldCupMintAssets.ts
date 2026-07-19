@@ -1,6 +1,8 @@
 export const WORLD_CUP_MINT_ASSETS = {
   world: {
     pitch: "/models/world-cup-final/pitch.glb",
+    playerSelectionRing: "/models/world-cup-final/player-selection-ring.glb",
+    ballLocator: "/models/world-cup-final/ball-locator.glb",
     straightStand: "/models/world-cup-final/straight-stand.glb",
     cornerStand: "/models/world-cup-final/corner-stand.glb",
     goal: "/models/world-cup-final/goal.glb",

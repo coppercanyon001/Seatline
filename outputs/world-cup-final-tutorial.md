@@ -263,8 +263,8 @@ proved the event routing, but it did not satisfy the final art direction:
 supporters needed their own identities, every motion needed to stay seated, and
 the grandstand could not contain baked people.
 
-The production crowd therefore uses four new fan rigs and 414 runtime clones.
-Three rows fill each long grandstand and two rows fill both ends. Every clone
+The production crowd therefore uses four new fan rigs and 458 runtime clones.
+Four rows fill each long grandstand and three rows fill both ends. Every clone
 owns an animation mixer, starts with its fan-specific seated idle clip, and
 crossfades to a varied seated celebration when the scoring event fires. Routing
 that event to `"all"` produces the requested whole-stadium reaction without
@@ -280,7 +280,7 @@ inseparable from an authored asset, replace the asset family instead of hiding
 the problem with more layers.
 
 The final camera follows the reference at a realistic broadcast scale. A
-42-degree field of view, elevated sideline position, and reduced X tracking
+44-degree field of view, elevated sideline position, and reduced X tracking
 keep almost the whole pitch visible while still following the phase of play.
 The near grandstand sits behind the camera so its canopy never blocks the
 field; the far and end sections remain visible and filled with the seated cast.
@@ -306,7 +306,7 @@ goal lines.
 
 The stand scale increased only enough to strengthen the seating silhouette.
 A larger experiment made the canopies cross the camera, so browser QA drove a
-safer value. The supporter grid grew to 414 clones across four long-side rows
+safer value. The supporter grid grew to 458 clones across four long-side rows
 and three end rows. Lower row baselines keep every fan seated within the
 grandstand structure, while the existing score event still crossfades every
 mixer into its fan-specific seated cheer.
@@ -331,6 +331,49 @@ Additional tutorial assets:
 - `outputs/world-cup-final-tutorial-assets/24-team-dugout-mint-preview.webp`
 - `outputs/world-cup-final-tutorial-assets/25-pitchside-board-mint-preview.webp`
 - `outputs/world-cup-final-tutorial-assets/26-equipment-station-mint-preview.webp`
+
+## Full-Send Gameplay and Readability Pass
+
+The recorded-play review exposed a systems problem rather than one isolated
+bug: the ball and controlled player were hard to distinguish, the camera
+followed both field axes and felt floaty, automatic switching had no visible
+identity, three outfielders collapsed into clusters, and out-of-bounds shots
+bounced off invisible walls.
+
+The final pass expanded each team to five outfield lanes plus a goalkeeper.
+Only one defender presses; the remaining players blend their authored home
+positions with the ball position. Pairwise spacing now resolves at a wider
+minimum distance. Spain still switches contextually to a receiving player, but
+a Mint gold ring makes that handoff obvious.
+
+Mint also produced a blue-and-white loose-ball locator and a low-profile pitch
+candidate in [this generation](https://mint.gg/chat/ph7762ym68xwf9x17cm497y4hx8atsqt).
+The two markers passed live QA. The pitch preview looked correct, but its GLB
+unfolded into reflective panels in the browser. The runtime capture documents
+the failure, and production pivots back to the previously verified Mint pitch.
+This is why preview approval and in-engine approval are separate gates.
+
+The broadcast camera now uses a 44-degree lens, higher fixed elevation, no
+vertical-field tracking, and only a subtle horizontal bias. The whole field and
+both goals remain visible while play moves. Sprint consumes a DOM stamina
+meter, desktop touch controls are hidden, and possession changes receive short
+status callouts.
+
+Out-of-bounds logic now awards:
+
+- throw-ins to the team that did not touch the ball last;
+- goal kicks when the attacking team sends the ball over the end line;
+- corners when the defending team makes the last touch.
+
+Final pass assets and evidence:
+
+- `27-professional-pitch-v2-preview.webp`
+- `28-player-selection-ring-preview.webp`
+- `29-ball-locator-preview.webp`
+- `30-final-stable-match.png`
+- `31-final-goal-cheer.png`
+- `32-final-champions.png`
+- `33-rejected-pitch-runtime.png`
 
 ## Reusable Lessons
 

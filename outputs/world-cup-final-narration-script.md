@@ -9,7 +9,7 @@ Target length: 5–7 minutes.
 **Narration:**
 “This is Final Whistle, an original Spain-versus-Argentina 3D football final.
 The stadium, pitch, props, characters, animation, and audio were all created
-through Mint. Three.js turns those assets into a playable 3-v-3 match with
+through Mint. Three.js turns those assets into a five-outfielder formation with
 goalkeepers, AI, charged shots, golden goal, and touch controls.”
 
 ## 0:25–0:55 — Start With a Contract
@@ -17,7 +17,7 @@ goalkeepers, AI, charged shots, golden goal, and touch controls.”
 **On screen:** Highlight the visual and gameplay contract in
 `MINT_ASSET_MANIFEST.md`.
 
-**Narration:**  
+**Narration:**
 “The first step was not generating a model. It was defining the product:
 miniature night-stadium art, clear Spain and Argentina palettes, no official
 logos or real-player likenesses, one readable broadcast camera, and complete
@@ -90,7 +90,7 @@ actions, a home position, and short action locks.”
 “The original grandstands contained spectators baked into one mesh. That made
 it impossible for the new people to be the only fans, so Mint generated a
 crowdless straight and corner kit. Four new supporter rigs received seated
-animation sets, and 414 clones now fill the bowl. Every one stays seated and
+animation sets, and 458 clones now fill the bowl. Every one stays seated and
 crossfades into a varied cheer after either team scores.”
 
 ## 5:15–5:40 — Finish the Technical Areas and Controls
@@ -115,6 +115,22 @@ states, a one-all clock expiry, and a two-one Spain victory. The final browser
 pass verified the wide camera, passing, through balls, grounded players, ball
 visibility, identical goals, synchronized seated cheering, and a clean
 console.”
+
+## Optional Addendum — Turn a Gameplay Recording Into a Fix List
+
+**On screen:** A short excerpt from the supplied recording, the rejected pitch
+capture 33, then final captures 30–32.
+
+**Narration:**
+“A real play recording changed the last pass from cosmetic polish into systems
+work. The camera was following too many axes, switching had no visible marker,
+the ball disappeared, formations collapsed, and boundaries bounced the ball
+back. I translated each symptom into one testable fix: stable broadcast
+framing, Mint player and ball markers, five home lanes, stronger spacing,
+stamina, and football restarts. One new pitch looked right in preview but
+failed in-engine, so I kept the good markers and restored the verified pitch.
+The final browser route then tested throw-ins, corners, goal kicks, goals,
+crowd cheers, victory, and the console.”
 
 ## 6:10–6:35 — Close
 

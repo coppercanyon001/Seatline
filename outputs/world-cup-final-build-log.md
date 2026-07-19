@@ -341,8 +341,8 @@ crowdless Mint grandstand modules in
 The visually inspected straight and corner modules contain empty red, gold, and
 navy seats with no embedded people.
 
-The finished stadium uses 414 seated clones from the four-person fan family.
-Every fan remains in a seated motion and all 414 crossfade into varied seated
+The finished stadium uses 458 seated clones from the four-person fan family.
+Every fan remains in a seated motion and all 458 crossfade into varied seated
 cheers on either goal.
 
 The gameplay pass also added:
@@ -353,7 +353,7 @@ The gameplay pass also added:
 - contextual Spain-player switching;
 - a possession readout;
 - one shared goal-construction helper for identical left and right frames;
-- a 42-degree, gently tracking broadcast camera positioned to keep nearly the
+- a 44-degree, gently tracking broadcast camera positioned to keep nearly the
   whole pitch visible at a realistic scale.
 
 Production and diagnostic captures:
@@ -381,7 +381,7 @@ but the two instances now use mirrored rotations. Their openings face the
 field while each net volume extends safely behind its goal line.
 
 The stand modules were enlarged conservatively after a larger first test pulled
-their canopies into the camera. Crowd placement then expanded to 414 animated
+their canopies into the camera. Crowd placement then expanded to 458 animated
 supporters across four long-side rows and three end rows. Row heights were
 lowered after visual QA so every person remains seated inside the stands rather
 than appearing above the roof.
@@ -410,3 +410,39 @@ New Mint tutorial assets:
 Browser QA exercised up-screen and right-screen movement, forced a goal, saw
 the entire crowd enter its seated cheer, confirmed both net depths outside the
 pitch, and reported no runtime errors.
+
+## Chapter 16 — Recorded-Play Diagnosis and Full Gameplay Pass
+
+The supplied gameplay recording made the remaining problems concrete:
+automatic player changes had no visible identity, the ball disappeared against
+white markings, camera tracking on both X and Z made input feel inaccurate,
+three-player formations collapsed into piles, and the touch/end lines behaved
+like invisible rebound walls.
+
+Mint generated a professional low-profile pitch, a controlled-player ring, and
+a loose-ball locator in
+[this asset chat](https://mint.gg/chat/ph7762ym68xwf9x17cm497y4hx8atsqt).
+The preview images were saved as assets 27–29. Live integration rejected the
+new pitch because its GLB rendered as folded reflective panels. The verified
+original Mint pitch was restored immediately; the bad runtime state is saved as
+`33-rejected-pitch-runtime.png`. The ring and locator passed and remain in
+production.
+
+The gameplay revision added:
+
+- five outfield home lanes plus a goalkeeper per team;
+- one pressing defender with formation-aware support and recovery targets;
+- stronger separation correction to prevent overlapping players;
+- a gold selected-player marker and blue loose-ball locator;
+- stamina-limited sprinting;
+- real throw-ins, corners, and goal kicks;
+- status feedback for possession and restarts;
+- a stable 44-degree broadcast camera with no Z-axis tracking;
+- desktop touch-control suppression;
+- a denser, less repetitive 458-seat crowd layout.
+
+Browser QA verified marker visibility, full-field framing, identical inward
+goals, all three restart types, desktop control suppression, scoring, whole
+crowd cheering, the 2–1 championship state, and an empty error console. Final
+captures are `30-final-stable-match.png`, `31-final-goal-cheer.png`, and
+`32-final-champions.png`.

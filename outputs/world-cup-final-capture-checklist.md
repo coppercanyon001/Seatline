@@ -28,6 +28,11 @@
 - [ ] Inward-facing goal openings with net depth outside both goal lines.
 - [ ] Mint dugouts, blank boards, and equipment stations along the touchlines.
 - [ ] `W` moving up-screen and `D` moving right-screen from the broadcast view.
+- [ ] Gold selected-player ring during an automatic receiver switch.
+- [ ] Blue locator under a loose ball.
+- [ ] Stamina draining during a sprint and recovering after release.
+- [ ] One throw-in, corner, and goal kick.
+- [ ] Rejected low-profile pitch runtime capture followed by the verified pivot.
 - [ ] Character and animation folders.
 - [ ] `worldCupMintAssets.ts` semantic asset map.
 - [ ] Root-motion normalization code.
@@ -61,6 +66,13 @@ Mint previews and browser captures plus the final supporter and broadcast pass:
 - `24-team-dugout-mint-preview.webp`
 - `25-pitchside-board-mint-preview.webp`
 - `26-equipment-station-mint-preview.webp`
+- `27-professional-pitch-v2-preview.webp`
+- `28-player-selection-ring-preview.webp`
+- `29-ball-locator-preview.webp`
+- `30-final-stable-match.png`
+- `31-final-goal-cheer.png`
+- `32-final-champions.png`
+- `33-rejected-pitch-runtime.png`
 
 ## Deterministic Capture Route
 
@@ -69,4 +81,8 @@ Open `/?qa=1`, start the match, then use:
 - `G` for a Spain goal;
 - `H` for an Argentina goal;
 - `X` for a 1–1 clock-expiry setup;
-- `V` for a 2–1 Spain championship.
+- `V` for a 2–1 Spain championship;
+- `T` for a Spain throw-in;
+- `C` for a Spain corner;
+- `B` for an Argentina goal kick;
+- `O` for a loose-ball locator check.

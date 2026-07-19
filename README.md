@@ -1,7 +1,8 @@
 # Final Whistle: Spain vs Argentina
 
 An original Mint-first 3D arcade football final. Lead Spain through a fast
-3-v-3 match plus goalkeepers against Argentina in a miniature night stadium.
+five-outfielder formation plus goalkeepers against Argentina in a packed night
+stadium.
 
 All visible and audible production assets—the pitch, stands, goals, props,
 players, animation, crowd, whistle, impacts, and victory audio—were created
@@ -16,9 +17,13 @@ animation playback, collision checks, camera work, AI, and game logic.
 - Hold `K` or `Space` to charge a shot, then release.
 - Press `L` to tackle and `Q` to switch Spain players.
 - Play a 150-second final; a draw goes to golden goal.
-- Use a wide, gently tracking broadcast camera with support runs, assisted
-  passing, contextual player switching, and a live possession readout.
-- Play inside a large crowdless Mint stadium populated exclusively by 414
+- Use a stable, zoomed-out broadcast camera with formation-aware support runs,
+  assisted passing, contextual player switching, and a live possession readout.
+- Read a gold Mint selection ring under the controlled player and a blue Mint
+  locator beneath loose balls.
+- Manage sprint stamina and play real throw-ins, corners, and goal kicks instead
+  of rebounding from invisible field walls.
+- Play inside a large crowdless Mint stadium populated exclusively by 458
   seated clones from a four-person supporter cast. Every fan performs a seated
   cheer whenever either team scores.
 - Track a compact classic black-and-white Mint football between correctly
@@ -61,6 +66,10 @@ Open `/?qa=1` for deterministic capture shortcuts:
 - `H`: Argentina goal
 - `X`: tied clock-expiry setup
 - `V`: Spain championship result
+- `T`: Spain throw-in
+- `C`: Spain corner
+- `B`: Argentina goal kick
+- `O`: loose ball and locator check
 
 ## Project Structure
 
@@ -81,7 +90,8 @@ outputs/world-cup-final-capture-checklist.md
 The `outputs/` folder contains a live production diary, a finished step-by-step
 tutorial, a narration script, a video capture checklist, fourteen Mint asset
 previews, and twelve browser screenshots covering both accepted and pivoted
-production stages.
+production stages. The final polish addendum includes three more Mint previews,
+four verified browser captures, and the rejected runtime-pitch evidence.
 
 ## Open-Source Gaming Notes
 

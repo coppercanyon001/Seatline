@@ -20,6 +20,7 @@ type Ui = {
   loading: string;
   sound: boolean;
   shotCharge: number;
+  stamina: number;
   activePlayer: number;
   possession: Team | "loose";
   winner: Team | "draw" | null;
@@ -50,6 +51,7 @@ const INITIAL_UI: Ui = {
   loading: "Loading Mint stadium assets…",
   sound: true,
   shotCharge: 0,
+  stamina: 100,
   activePlayer: 7,
   possession: "loose",
   winner: null,
@@ -129,8 +131,8 @@ export default function WorldCupFinal() {
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x09162f);
         scene.fog = new THREE.Fog(0x09162f, 38, 86);
-        const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 150);
-        camera.position.set(-2, 18.5, 24.5);
+        const camera = new THREE.PerspectiveCamera(44, 1, 0.1, 150);
+        camera.position.set(-1, 20.5, 27);
         camera.lookAt(0, 0, 0);
 
         const renderer = new THREE.WebGLRenderer({
@@ -250,7 +252,10 @@ export default function WorldCupFinal() {
 
         const stadium = new THREE.Group();
         scene.add(stadium);
-        const pitch = fitWidth(sourceScene(ASSETS.world.pitch), FIELD_HALF_X * 2);
+        const pitchSource = sourceScene(ASSETS.world.pitch);
+        const pitchSize = new THREE.Box3().setFromObject(pitchSource).getSize(new THREE.Vector3());
+        if (pitchSize.z > pitchSize.x) pitchSource.rotation.y = Math.PI / 2;
+        const pitch = fitWidth(pitchSource, FIELD_HALF_X * 2);
         pitch.position.y = -0.055;
         pitch.traverse((child) => {
           const mesh = child as import("three").Mesh;
@@ -271,15 +276,15 @@ export default function WorldCupFinal() {
           stadium.add(stand);
         };
         for (const x of [-24, -16, -8, 0, 8, 16, 24]) {
-          addStand(false, x, -15.2, Math.PI);
+          addStand(false, x, -14.55, Math.PI);
           addStand(false, x, 34, 0);
         }
         for (const z of [-8.2, 0, 8.2, 16.4, 24.6]) {
-          addStand(false, -22.5, z, -Math.PI / 2);
-          addStand(false, 22.5, z, Math.PI / 2);
+          addStand(false, -21.25, z, -Math.PI / 2);
+          addStand(false, 21.25, z, Math.PI / 2);
         }
-        addStand(true, -20.2, -14.2, (5 * Math.PI) / 4);
-        addStand(true, 20.2, -14.2, (3 * Math.PI) / 4);
+        addStand(true, -19.1, -13.7, (5 * Math.PI) / 4);
+        addStand(true, 19.1, -13.7, (3 * Math.PI) / 4);
         addStand(true, -20.2, 32.8, (7 * Math.PI) / 4);
         addStand(true, 20.2, 32.8, Math.PI / 4);
 
@@ -409,15 +414,23 @@ export default function WorldCupFinal() {
           createPlayer("spainOutfield", "spain", "outfield", 7, -5.5, 0),
           createPlayer("spainOutfield", "spain", "outfield", 10, -1.8, -5.3),
           createPlayer("spainOutfield", "spain", "outfield", 8, -1.8, 5.3),
+          createPlayer("spainOutfield", "spain", "outfield", 4, -8.2, -5.8),
+          createPlayer("spainOutfield", "spain", "outfield", 6, -8.2, 5.8),
         ];
         const argentina = [
           createPlayer("argentinaOutfield", "argentina", "outfield", 10, 5.4, 0),
           createPlayer("argentinaOutfield", "argentina", "outfield", 11, 1.9, -5.3),
           createPlayer("argentinaOutfield", "argentina", "outfield", 7, 1.9, 5.3),
+          createPlayer("argentinaOutfield", "argentina", "outfield", 4, 8.2, 5.8),
+          createPlayer("argentinaOutfield", "argentina", "outfield", 6, 8.2, -5.8),
         ];
         const spainKeeper = createPlayer("spainGoalkeeper", "spain", "goalkeeper", 1, -13.9, 0);
         const argentinaKeeper = createPlayer("argentinaGoalkeeper", "argentina", "goalkeeper", 23, 13.9, 0);
         let controlled = spain[0];
+        const selectionRing = fitLargest(sourceScene(ASSETS.world.playerSelectionRing), 1.36);
+        selectionRing.position.set(controlled.root.position.x, pitchSurfaceY + 0.012, controlled.root.position.z);
+        selectionRing.visible = false;
+        scene.add(selectionRing);
 
         const fanKeys = Object.keys(ASSETS.fans) as WorldCupFanKey[];
         const createSpectator = (
@@ -448,56 +461,64 @@ export default function WorldCupFinal() {
           actions.idle.time = (spectators.length % 7) * 0.17;
           spectators.push({ root, mixer, actions, currentAction: "idle" });
         };
-        const supporterXs = Array.from({ length: 33 }, (_, index) => -25 + index * (50 / 32));
+        const crowdNoise = (index: number, row: number, salt: number) =>
+          (((index * 37 + row * 61 + salt * 29) % 101) / 100 - 0.5);
+        const fanForSeat = (index: number, row: number, salt: number) =>
+          fanKeys[Math.abs(index * 7 + row * 3 + salt * 5) % fanKeys.length];
+        const supporterXs = Array.from({ length: 37 }, (_, index) => -25 + index * (50 / 36));
         const sideRows = [
-          { farZ: -12.55, nearZ: 31.35, y: 0.75, height: 1.65 },
-          { farZ: -13.9, nearZ: 32.7, y: 1.55, height: 1.68 },
-          { farZ: -15.3, nearZ: 34.1, y: 2.35, height: 1.71 },
-          { farZ: -16.75, nearZ: 35.55, y: 3.15, height: 1.74 },
+          { farZ: -12.15, nearZ: 31.35, y: 0.75, height: 1.65 },
+          { farZ: -13.4, nearZ: 32.7, y: 1.55, height: 1.68 },
+          { farZ: -14.75, nearZ: 34.1, y: 2.35, height: 1.71 },
+          { farZ: -16.1, nearZ: 35.55, y: 3.15, height: 1.74 },
         ] as const;
         sideRows.forEach((row, rowIndex) => {
           supporterXs.forEach((x, index) => {
+            const farJitter = crowdNoise(index, rowIndex, 1);
+            const nearJitter = crowdNoise(index, rowIndex, 2);
             createSpectator(
-              fanKeys[(index + rowIndex * 2) % fanKeys.length],
-              x,
-              row.y,
-              row.farZ,
+              fanForSeat(index, rowIndex, 1),
+              x + farJitter * 0.16,
+              row.y + Math.abs(farJitter) * 0.025,
+              row.farZ + farJitter * 0.08,
               0,
-              row.height,
+              row.height * (1 + farJitter * 0.035),
             );
             createSpectator(
-              fanKeys[(index + rowIndex * 2 + 2) % fanKeys.length],
-              x,
-              row.y,
-              row.nearZ,
+              fanForSeat(index, rowIndex, 2),
+              x + nearJitter * 0.16,
+              row.y + Math.abs(nearJitter) * 0.025,
+              row.nearZ + nearJitter * 0.08,
               Math.PI,
-              row.height,
+              row.height * (1 + nearJitter * 0.035),
             );
           });
         });
-        const endSupporterZs = Array.from({ length: 25 }, (_, index) => -10 + index * 1.5);
+        const endSupporterZs = Array.from({ length: 27 }, (_, index) => -10 + index * (20 / 26));
         const endRows = [
-          { x: 20.1, y: 0.75, height: 1.66 },
-          { x: 22.25, y: 1.75, height: 1.7 },
-          { x: 24.3, y: 2.85, height: 1.74 },
+          { x: 18.85, y: 0.75, height: 1.66 },
+          { x: 21, y: 1.75, height: 1.7 },
+          { x: 23.05, y: 2.85, height: 1.74 },
         ] as const;
         endRows.forEach((row, rowIndex) => {
           endSupporterZs.forEach((z, index) => {
+            const leftJitter = crowdNoise(index, rowIndex, 3);
+            const rightJitter = crowdNoise(index, rowIndex, 4);
             createSpectator(
-              fanKeys[(index + rowIndex) % fanKeys.length],
+              fanForSeat(index, rowIndex, 3),
               -row.x,
-              row.y,
-              z,
+              row.y + Math.abs(leftJitter) * 0.025,
+              z + leftJitter * 0.12,
               Math.PI / 2,
-              row.height,
+              row.height * (1 + leftJitter * 0.035),
             );
             createSpectator(
-              fanKeys[(index + rowIndex + 2) % fanKeys.length],
+              fanForSeat(index, rowIndex, 4),
               row.x,
-              row.y,
-              z,
+              row.y + Math.abs(rightJitter) * 0.025,
+              z + rightJitter * 0.12,
               -Math.PI / 2,
-              row.height,
+              row.height * (1 + rightJitter * 0.035),
             );
           });
         });
@@ -513,10 +534,14 @@ export default function WorldCupFinal() {
           });
         };
 
-        const ball = fitLargest(sourceScene(ASSETS.world.football), 0.46);
+        const ball = fitLargest(sourceScene(ASSETS.world.football), 0.52);
         ball.position.set(0, ballGroundY, 0);
         scene.add(ball);
-        const ballLight = new THREE.PointLight(0xffefaa, 1.35, 5.5, 2);
+        const ballLocator = fitLargest(sourceScene(ASSETS.world.ballLocator), 1.02);
+        ballLocator.position.set(0, pitchSurfaceY + 0.016, 0);
+        ballLocator.visible = false;
+        scene.add(ballLocator);
+        const ballLight = new THREE.PointLight(0xffefaa, 1.7, 6.2, 2);
         scene.add(ballLight);
         const ballVelocity = new THREE.Vector3();
         let ballOwner: Player | null = null;
@@ -527,6 +552,8 @@ export default function WorldCupFinal() {
         let extraTime = false;
         let goalPause = 0;
         let shotCharge = 0;
+        let stamina = 100;
+        let lastStaminaUi = 100;
         let lastUiSecond = MATCH_SECONDS;
         let clockAccumulator = 0;
         let elapsed = 0;
@@ -579,14 +606,24 @@ export default function WorldCupFinal() {
               (a, b) =>
                 a.root.position.distanceToSquared(target) - b.root.position.distanceToSquared(target),
             )[0];
-        const giveBall = (player: Player) => {
+        const giveBall = (player: Player, status?: string) => {
+          const changedOwner = ballOwner !== player;
           ballOwner = player;
           player.possessionSince = elapsed;
           ballVelocity.set(0, 0, 0);
           lastTouch = player.team;
-          setUi((value) =>
-            value.possession === player.team ? value : { ...value, possession: player.team },
-          );
+          if (changedOwner || status) {
+            const teamName = player.team === "spain" ? "Spain" : "Argentina";
+            setUi((value) => ({
+              ...value,
+              possession: player.team,
+              status:
+                status ??
+                (player.role === "goalkeeper"
+                  ? `${teamName} goalkeeper collects`
+                  : `${teamName} #${player.number} wins possession`),
+            }));
+          }
         };
         const releaseBall = (
           player: Player,
@@ -765,6 +802,8 @@ export default function WorldCupFinal() {
           lastUiSecond = MATCH_SECONDS;
           clockAccumulator = 0;
           extraTime = false;
+          stamina = 100;
+          lastStaminaUi = 100;
           phase = "playing";
           celebrationRoot.visible = false;
           setSpectatorMood(null);
@@ -781,20 +820,35 @@ export default function WorldCupFinal() {
             winner: null,
             status: "Kick-off — Spain attack to the right",
             shotCharge: 0,
+            stamina: 100,
             possession: "spain",
           }));
         };
 
         const updateUser = (delta: number) => {
           const direction = readInputDirection();
+          const sprinting = held.has("sprint") && stamina > 2 && direction.lengthSq() > 0;
           if (direction.lengthSq() > 0) {
             direction.normalize();
-            const speed = held.has("sprint") ? 6.1 : 4.45;
+            const speed = sprinting ? 5.85 : 4.45;
             controlled.velocity.copy(direction).multiplyScalar(speed);
             controlled.root.position.addScaledVector(controlled.velocity, delta);
             setFacing(controlled, direction);
           } else {
             controlled.velocity.multiplyScalar(Math.max(0, 1 - delta * 13));
+          }
+          stamina = THREE.MathUtils.clamp(
+            stamina + (sprinting ? -24 : 18) * delta,
+            0,
+            100,
+          );
+          if (
+            Math.abs(stamina - lastStaminaUi) >= 2 ||
+            (stamina === 0 && lastStaminaUi !== 0) ||
+            (stamina === 100 && lastStaminaUi !== 100)
+          ) {
+            lastStaminaUi = stamina;
+            setUi((value) => ({ ...value, stamina }));
           }
           clampPlayer(controlled);
           if (held.has("shoot") && ballOwner === controlled) {
@@ -839,16 +893,16 @@ export default function WorldCupFinal() {
                 const attackSign = team === "spain" ? 1 : -1;
                 const target = player.home.clone();
                 target.x = THREE.MathUtils.clamp(
-                  ballOwner.root.position.x + attackSign * (3.2 + Math.abs(player.home.z) * 0.16),
+                  player.home.x + ballOwner.root.position.x * 0.36 + attackSign * 0.85,
                   -12.8,
                   12.8,
                 );
                 target.z = THREE.MathUtils.clamp(
-                  player.home.z * 0.78 + ballOwner.root.position.z * 0.22,
+                  player.home.z * 0.86 + ballOwner.root.position.z * 0.14,
                   -8.9,
                   8.9,
                 );
-                moveToward(player, target, 3.55, delta);
+                moveToward(player, target, 3.35, delta);
               } else if (
                 ballOwner &&
                 ballOwner.team !== team &&
@@ -862,9 +916,10 @@ export default function WorldCupFinal() {
               } else if (!ballOwner && player === chaser) {
                 moveToward(player, ball.position, 4.1, delta);
               } else {
-                const shift = THREE.MathUtils.clamp(ball.position.x * 0.18, -2.3, 2.3);
+                const shift = THREE.MathUtils.clamp(ball.position.x * 0.22, -2.5, 2.5);
                 const target = player.home.clone();
                 target.x += shift;
+                target.z = player.home.z * 0.88 + ball.position.z * 0.12;
                 moveToward(player, target, 3.1, delta);
               }
               clampPlayer(player);
@@ -881,7 +936,7 @@ export default function WorldCupFinal() {
           );
           if (ballOwner === keeper) {
             keeper.velocity.set(0, 0, 0);
-            if (elapsed - keeper.possessionSince > 0.72) {
+            if (elapsed - keeper.possessionSince > 1.2) {
               const teammate = nearest(keeper.team, keeper.root.position);
               releaseBall(keeper, teammate.root.position.clone().sub(keeper.root.position), 8.2, 0.65);
               keeper.cooldown = 1;
@@ -902,6 +957,66 @@ export default function WorldCupFinal() {
           }
           clampPlayer(keeper);
         };
+        const placeRestart = (
+          team: Team,
+          position: import("three").Vector3,
+          status: string,
+          includeKeeper = false,
+        ) => {
+          const taker = nearest(team, position, includeKeeper);
+          if (!taker) return;
+          ballOwner = null;
+          ballVelocity.set(0, 0, 0);
+          taker.root.position.copy(position);
+          taker.root.position.y = playerSurfaceY;
+          clampPlayer(taker);
+          setFacing(taker, new THREE.Vector3(team === "spain" ? 1 : -1, 0, 0));
+          giveBall(taker, status);
+          if (team === "spain" && taker.role === "outfield") {
+            controlled.velocity.set(0, 0, 0);
+            controlled = taker;
+            setUi((value) => ({ ...value, activePlayer: taker.number }));
+          }
+          playSound("whistle");
+        };
+        const awardTouchlineRestart = () => {
+          const team: Team = lastTouch === "spain" ? "argentina" : "spain";
+          const teamName = team === "spain" ? "Spain" : "Argentina";
+          placeRestart(
+            team,
+            new THREE.Vector3(
+              THREE.MathUtils.clamp(ball.position.x, -13.35, 13.35),
+              playerSurfaceY,
+              Math.sign(ball.position.z || 1) * (FIELD_HALF_Z - 0.52),
+            ),
+            `${teamName} throw-in`,
+          );
+        };
+        const awardEndlineRestart = (rightEnd: boolean) => {
+          const defendingTeam: Team = rightEnd ? "argentina" : "spain";
+          const attackingTeam: Team = rightEnd ? "spain" : "argentina";
+          const goalKick = lastTouch === attackingTeam;
+          if (goalKick) {
+            const teamName = defendingTeam === "spain" ? "Spain" : "Argentina";
+            placeRestart(
+              defendingTeam,
+              new THREE.Vector3(rightEnd ? 13.7 : -13.7, playerSurfaceY, 0),
+              `${teamName} goal kick`,
+              true,
+            );
+            return;
+          }
+          const teamName = attackingTeam === "spain" ? "Spain" : "Argentina";
+          placeRestart(
+            attackingTeam,
+            new THREE.Vector3(
+              rightEnd ? 14.15 : -14.15,
+              playerSurfaceY,
+              Math.sign(ball.position.z || 1) * 9.75,
+            ),
+            `${teamName} corner`,
+          );
+        };
         const updateBall = (delta: number) => {
           if (ballOwner) {
             const front = ballOwner.facing.clone().multiplyScalar(0.58);
@@ -921,25 +1036,20 @@ export default function WorldCupFinal() {
             ballVelocity.x *= drag;
             ballVelocity.z *= drag;
           }
-          if (Math.abs(ball.position.z) > FIELD_HALF_Z) {
-            ball.position.z = THREE.MathUtils.clamp(ball.position.z, -FIELD_HALF_Z, FIELD_HALF_Z);
-            ballVelocity.z *= -0.64;
-          }
           const inGoalMouth =
             Math.abs(ball.position.z) < GOAL_HALF_Z &&
             ball.position.y < pitchSurfaceY + 2.7;
           if (ball.position.x > FIELD_HALF_X + 0.18) {
             if (inGoalMouth) scoreGoal("spain");
-            else {
-              ball.position.x = FIELD_HALF_X;
-              ballVelocity.x *= -0.62;
-            }
+            else awardEndlineRestart(true);
+            return;
           } else if (ball.position.x < -FIELD_HALF_X - 0.18) {
             if (inGoalMouth) scoreGoal("argentina");
-            else {
-              ball.position.x = -FIELD_HALF_X;
-              ballVelocity.x *= -0.62;
-            }
+            else awardEndlineRestart(false);
+            return;
+          } else if (Math.abs(ball.position.z) > FIELD_HALF_Z) {
+            awardTouchlineRestart();
+            return;
           }
           if (phase !== "playing") return;
           const candidates = [...players].sort(
@@ -950,7 +1060,7 @@ export default function WorldCupFinal() {
           const candidate = candidates[0];
           if (
             candidate &&
-            candidate.root.position.distanceTo(ball.position) < (candidate.role === "goalkeeper" ? 1 : 0.72) &&
+            candidate.root.position.distanceTo(ball.position) < (candidate.role === "goalkeeper" ? 1 : 0.78) &&
             ball.position.y < ballGroundY + 0.75 &&
             ballVelocity.length() < 7.2
           ) {
@@ -966,13 +1076,14 @@ export default function WorldCupFinal() {
             for (let b = a + 1; b < players.length; b += 1) {
               const delta = players[b].root.position.clone().sub(players[a].root.position).setY(0);
               const distance = delta.length();
-              if (distance > 0 && distance < 0.58) {
-                delta.normalize().multiplyScalar((0.58 - distance) * 0.5);
+              if (distance > 0 && distance < 0.92) {
+                delta.normalize().multiplyScalar((0.92 - distance) * 0.5);
                 if (players[a].role === "outfield") players[a].root.position.addScaledVector(delta, -1);
                 if (players[b].role === "outfield") players[b].root.position.add(delta);
               }
             }
           }
+          players.forEach(clampPlayer);
         };
         const updateClock = (delta: number) => {
           if (extraTime) return;
@@ -1093,6 +1204,26 @@ export default function WorldCupFinal() {
               secondsLeft = 1;
               setUi((value) => ({ ...value, spain: 1, argentina: 1, seconds: 1 }));
             }
+            if (key === "t") {
+              placeRestart("spain", new THREE.Vector3(2, playerSurfaceY, FIELD_HALF_Z - 0.52), "Spain throw-in");
+            }
+            if (key === "c") {
+              placeRestart("spain", new THREE.Vector3(14.15, playerSurfaceY, -9.75), "Spain corner");
+            }
+            if (key === "b") {
+              placeRestart(
+                "argentina",
+                new THREE.Vector3(13.7, playerSurfaceY, 0),
+                "Argentina goal kick",
+                true,
+              );
+            }
+            if (key === "o") {
+              ballOwner = null;
+              ball.position.set(0, ballGroundY, 0);
+              ballVelocity.set(0, 0, 0);
+              setUi((value) => ({ ...value, possession: "loose", status: "Loose ball" }));
+            }
           }
         };
         const onKeyUp = (event: KeyboardEvent) => {
@@ -1173,31 +1304,49 @@ export default function WorldCupFinal() {
           }
           ballLight.position.copy(ball.position);
           ballLight.position.y += 0.65;
+          selectionRing.visible = phase === "playing" || phase === "goal";
+          selectionRing.position.set(
+            controlled.root.position.x,
+            pitchSurfaceY + 0.012,
+            controlled.root.position.z,
+          );
+          selectionRing.rotation.y = controlled.root.rotation.y;
+          const selectionPulse = 1 + Math.sin(elapsed * 4.5) * 0.045;
+          selectionRing.scale.setScalar(selectionPulse);
+          ballLocator.visible = phase === "playing" && ballOwner === null;
+          ballLocator.position.set(ball.position.x, pitchSurfaceY + 0.016, ball.position.z);
+          const locatorPulse = 0.92 + Math.sin(elapsed * 6.2) * 0.1;
+          ballLocator.scale.setScalar(locatorPulse);
           if (celebrationRoot.visible) {
             celebrationRoot.rotation.y = Math.sin(elapsed * 0.7) * 0.08;
           }
 
-          const focus =
+          const focusX =
             phase === "finished"
-              ? new THREE.Vector3(0, 1.2, 0)
-              : ball.position.clone().lerp(controlled.root.position, 0.22);
-          cameraTarget.lerp(focus, 1 - Math.exp(-delta * 3.2));
+              ? 0
+              : THREE.MathUtils.lerp(ball.position.x, controlled.root.position.x, 0.22);
+          cameraTarget.x = THREE.MathUtils.lerp(
+            cameraTarget.x,
+            focusX,
+            1 - Math.exp(-delta * 2.6),
+          );
+          cameraTarget.z = 0;
           if (phase === "finished") {
             desiredCamera.set(-9.5, 9.7, 14);
           } else if (phase === "menu") {
-            desiredCamera.set(-3, 20, 25.5);
+            desiredCamera.set(-1, 20.5, 27);
           } else {
             desiredCamera.set(
-              THREE.MathUtils.clamp(cameraTarget.x * 0.28 - 0.75, -4.5, 4),
-              18.5,
-              24.5,
+              THREE.MathUtils.clamp(cameraTarget.x * 0.07 - 0.18, -1.2, 1.1),
+              20.5,
+              27,
             );
           }
           camera.position.lerp(desiredCamera, 1 - Math.exp(-delta * 2.4));
           camera.lookAt(
-            cameraTarget.x,
-            phase === "finished" ? pitchSurfaceY + 1.2 : pitchSurfaceY + 0.85,
-            cameraTarget.z,
+            cameraTarget.x * 0.18,
+            phase === "finished" ? pitchSurfaceY + 1.2 : pitchSurfaceY + 0.65,
+            0,
           );
           renderer.render(scene, camera);
         };
@@ -1271,6 +1420,10 @@ export default function WorldCupFinal() {
             ACTIVE · SPAIN #{ui.activePlayer} ·{" "}
             {ui.possession === "loose" ? "LOOSE BALL" : `${ui.possession.toUpperCase()} BALL`}
           </div>
+          <div className="final-stamina" aria-label={`Stamina ${Math.round(ui.stamina)} percent`}>
+            <small>STAMINA</small>
+            <i><span style={{ width: `${Math.round(ui.stamina)}%` }} /></i>
+          </div>
           <div className="final-charge" aria-label={`Shot power ${Math.round(ui.shotCharge * 100)} percent`}>
             <span style={{ width: `${Math.round(ui.shotCharge * 100)}%` }} />
           </div>
@@ -1310,8 +1463,8 @@ export default function WorldCupFinal() {
             <strong className="argentina">ARGENTINA</strong>
           </div>
           <p className="final-intro">
-            Lead Spain through 150 seconds of arcade football. Pass into space,
-            tackle cleanly, and charge your shot. A draw goes to golden goal.
+            Lead Spain through 150 seconds of expanded small-sided football. Hold formation,
+            pass into space, manage your sprint, and charge your shot. A draw goes to golden goal.
           </p>
           <button className="final-primary" onClick={() => controllerRef.current?.start()}>
             PLAY THE FINAL
