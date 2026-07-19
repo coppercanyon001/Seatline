@@ -13,20 +13,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Final Whistle: Spain vs Argentina",
-  description: "An original Mint-generated 3D arcade football final.",
+  title: "Seatline NYC — Preview Your Seat for The Odyssey",
+  description:
+    "A Mint-authored 3D cinema seat preview for New York screenings of The Odyssey.",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {children}
       </body>
     </html>

@@ -13,40 +13,30 @@ async function render() {
     new Request("http://localhost/", {
       headers: { accept: "text/html" },
     }),
-    {
-      ASSETS: {
-        fetch: async () => new Response("Not found", { status: 404 }),
-      },
-    },
-    {
-      waitUntil() {},
-      passThroughOnException() {},
-    },
+    { ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } },
+    { waitUntil() {}, passThroughOnException() {} },
   );
 }
 
-test("server-renders Final Whistle metadata", async () => {
+test("server-renders Seatline NYC metadata", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
-
   const html = await response.text();
-  assert.match(html, /<title>Final Whistle: Spain vs Argentina<\/title>/i);
-  assert.match(html, /Lead Spain against Argentina in an original 3D arcade football final/i);
+  assert.match(html, /<title>Seatline NYC — Preview Your Seat for The Odyssey<\/title>/i);
+  assert.match(html, /Choose a New York theater, showtime, and seat/i);
 });
 
-test("documents the Mint-first football game and tutorial package", async () => {
+test("documents the Mint-first theater preview", async () => {
   const [readme, packageJson, manifest] = await Promise.all([
     readFile(new URL("README.md", root), "utf8"),
     readFile(new URL("package.json", root), "utf8"),
     readFile(new URL("MINT_ASSET_MANIFEST.md", root), "utf8"),
   ]);
-
-  assert.match(readme, /Final Whistle: Spain vs Argentina/);
-  assert.match(readme, /Mint-first/i);
-  assert.match(readme, /Open-Source Gaming Notes/);
-  assert.match(packageJson, /"name": "final-whistle-spain-argentina"/);
+  assert.match(readme, /Seatline NYC/);
+  assert.match(readme, /Mint-authored/i);
+  assert.match(packageJson, /"name": "seatline-nyc"/);
   assert.match(packageJson, /"license": "MIT"/);
-  assert.match(manifest, /Structural Validation/i);
-  assert.match(manifest, /reject before final generation and pivot to solid Mint modules/i);
+  assert.match(manifest, /Structural Validation Contract/i);
+  assert.match(manifest, /Monument IMAX shell/i);
 });

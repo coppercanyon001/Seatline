@@ -1,52 +1,42 @@
-# Final Whistle: Spain vs Argentina
+# Seatline NYC
 
-An original Mint-first 3D arcade football final. Lead Spain through a fast
-five-outfielder formation plus goalkeepers against Argentina in a packed night
-stadium.
+A Mint-authored 3D ticket-booking preview for *The Odyssey* in New York City.
+Choose a theater, showtime, and individual seat, then move directly into the
+seated camera view before continuing to the exhibitor.
 
-All visible and audible production assets—the pitch, stands, goals, props,
-players, animation, crowd, whistle, impacts, and victory audio—were created
-through Mint. Three.js is used only for assembly, lighting, transforms,
-animation playback, collision checks, camera work, AI, and game logic.
+## Experience
 
-## Gameplay
-
-- Move with `WASD` or the arrow keys; hold `Shift` to sprint.
-- Press `J` to pass and switch to the receiver.
-- Press `I` for an assisted through ball into attacking space.
-- Hold `K` or `Space` to charge a shot, then release.
-- Press `L` to tackle and `Q` to switch Spain players.
-- Play a 150-second final; a draw goes to golden goal.
-- Use a stable, zoomed-out broadcast camera with formation-aware support runs,
-  assisted passing, contextual player switching, and a live possession readout.
-- Read a gold Mint selection ring under the controlled player and a blue Mint
-  locator beneath loose balls.
-- Manage sprint stamina and play real throw-ins, corners, and goal kicks instead
-  of rebounding from invisible field walls.
-- Play inside a large crowdless Mint stadium populated exclusively by 458
-  seated clones from a four-person supporter cast. Every fan performs a seated
-  cheer whenever either team scores.
-- Track a compact classic black-and-white Mint football between correctly
-  oriented goals.
-- Read movement directly from the broadcast camera: up moves up-screen, left
-  moves left-screen, and the same direction guides passes and shots.
-- Play past Mint dugouts, blank pitchside boards, and an equipment station
-  placed along both touchlines.
-- Use the touch-sized movement and action controls on mobile.
+- Browse a dated New York listing snapshot for AMC Lincoln Square 13, Regal
+  Times Square, and Alamo Drafthouse Downtown Brooklyn.
+- Compare IMAX 70mm, RPX, and dine-in auditorium layouts.
+- Select seats with accessible, companion, occupied, and available states.
+- See each chair's true 3D screen angle, screen fill, distance, and centering.
+- Click seats in either the 2D map or the 3D auditorium.
+- Review an estimated total, then open the theater's live listing to confirm
+  current inventory and checkout.
+- Use the full flow on desktop, tablet, or mobile.
 
 ## Mint Asset Policy
 
-The stadium splat experiment was rejected because its preview could not be
-inspected against the project’s orientation, collider, pitch-clearance, and
-camera gates. The final game uses verified solid Mint modules.
+All visible production assets are Mint-created: three auditorium shells, two
+screen formats, two chair styles, an aisle beacon, and the original mythic sea
+projection image. Three.js only loads, clones, scales, places, lights, and
+renders those assets and moves the camera.
 
-See [MINT_ASSET_MANIFEST.md](./MINT_ASSET_MANIFEST.md) for accepted production
-families, failed passes, provenance, and validation. See
-[GAME_WORKFLOW.md](./GAME_WORKFLOW.md) for the Mint-only production rules.
+See [MINT_ASSET_MANIFEST.md](./MINT_ASSET_MANIFEST.md) for the asset contract,
+provenance, validation, and runtime paths. See
+[GAME_WORKFLOW.md](./GAME_WORKFLOW.md) for the project rules.
+
+## Listing Data
+
+The interface is a July 18, 2026 preview snapshot derived from public theater
+listings and official film-format information. It is not a live inventory,
+reservation, or checkout API. Showtime prices and remaining-seat counts are
+clearly labeled as preview data.
 
 ## Local Development
 
-Requirements: Node.js `>=22.13.0`.
+Requires Node.js `>=22.13.0`.
 
 ```bash
 npm install
@@ -60,41 +50,19 @@ npm run build
 npm test
 ```
 
-Open `/?qa=1` for deterministic capture shortcuts:
-
-- `G`: Spain goal
-- `H`: Argentina goal
-- `X`: tied clock-expiry setup
-- `V`: Spain championship result
-- `T`: Spain throw-in
-- `C`: Spain corner
-- `B`: Argentina goal kick
-- `O`: loose ball and locator check
-
 ## Project Structure
 
 ```text
-app/WorldCupFinal.tsx              Scene, gameplay, AI, camera, audio, and animation
-app/worldCupMintAssets.ts          Authoritative Mint runtime map
-public/models/world-cup-final/     Mint stadium, props, and player rigs
-public/animations/world-cup-final/ Mint animation clips
-public/audio/world-cup-final/      Mint match audio
-MINT_ASSET_MANIFEST.md             Provenance and verified behavior
-outputs/world-cup-final-tutorial.md
-outputs/world-cup-final-narration-script.md
-outputs/world-cup-final-capture-checklist.md
+app/SeatlineNYC.tsx             Booking UI, 3D scene, seat interaction, camera
+app/seatlineData.ts             Typed New York theater preview database
+app/seatlineMintAssets.ts       Authoritative Mint runtime map
+public/models/seatline/         Mint auditorium, screen, chair, and fixture GLBs
+public/images/seatline/         Mint projection artwork and review previews
+MINT_ASSET_MANIFEST.md          Asset contract, provenance, and validation
 ```
 
-## Tutorial Pack
-
-The `outputs/` folder contains a live production diary, a finished step-by-step
-tutorial, a narration script, a video capture checklist, fourteen Mint asset
-previews, and twelve browser screenshots covering both accepted and pivoted
-production stages. The final polish addendum includes three more Mint previews,
-four verified browser captures, and the rejected runtime-pitch evidence.
-
-## Open-Source Gaming Notes
+## License
 
 The code is licensed under MIT. Generated assets may have separate rights under
-their Mint generation terms. Verify the asset rights for your use case before
-redistributing or selling asset packs.
+their Mint generation terms; verify those terms before redistributing the
+asset files.

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import WorldCupFinal from "./WorldCupFinal";
+import SeatlineNYC from "./SeatlineNYC";
 
 export const metadata: Metadata = {
-  title: "Final Whistle: Spain vs Argentina",
-  description: "Lead Spain against Argentina in an original 3D arcade football final.",
+  title: "Seatline NYC — Preview Your Seat for The Odyssey",
+  description:
+    "Choose a New York theater, showtime, and seat, then preview the real 3D sightline before you book The Odyssey.",
 };
 
 export default function Home() {
-  return <WorldCupFinal />;
+  return <SeatlineNYC />;
 }
