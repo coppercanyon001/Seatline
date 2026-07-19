@@ -25,6 +25,9 @@
 - [ ] Empty straight/corner stand previews, followed by the exclusive fan cast.
 - [ ] Wide broadcast framing matching the realistic reference scale.
 - [ ] Every visible fan performing a seated goal celebration.
+- [ ] Inward-facing goal openings with net depth outside both goal lines.
+- [ ] Mint dugouts, blank boards, and equipment stations along the touchlines.
+- [ ] `W` moving up-screen and `D` moving right-screen from the broadcast view.
 - [ ] Character and animation folders.
 - [ ] `worldCupMintAssets.ts` semantic asset map.
 - [ ] Root-motion normalization code.
@@ -55,6 +58,9 @@ Mint previews and browser captures plus the final supporter and broadcast pass:
 - `21-empty-corner-stand-preview.webp`
 - `22-final-wide-empty-stands-seated-crowd.png`
 - `23-final-all-fans-seated-cheer.png`
+- `24-team-dugout-mint-preview.webp`
+- `25-pitchside-board-mint-preview.webp`
+- `26-equipment-station-mint-preview.webp`
 
 ## Deterministic Capture Route
 

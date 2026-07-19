@@ -50,6 +50,7 @@ procedural world geometry is used.
 | Core pitch and goals | [Mint chat](https://mint.gg/chat/ph74x6mhqdn6pe9a6hqytkdvrx8asjdk) | `public/models/world-cup-final/pitch.glb`, `goal.glb` | Accepted |
 | Empty grandstand kit | [Mint chat](https://mint.gg/chat/ph74a7xnk3ckj3z08rn1mwr9c58ar5ve) | `public/models/world-cup-final/straight-stand.glb`, `corner-stand.glb` | Accepted |
 | Match props | [Mint chat](https://mint.gg/chat/ph72h5kerwdw0nzdfnwe2a75fh8arvrg) | `corner-flag.glb`, `trophy.glb`, `confetti.glb` | Accepted |
+| Sideline kit | [Mint chat](https://mint.gg/chat/ph782z5v5cdp4b99j77czrag9x8arrh2) | `team-dugout.glb`, `pitchside-board.glb`, `equipment-station.glb` | Accepted |
 | Classic match ball replacement | [Mint chat](https://mint.gg/chat/ph7cs7g4v4xhyycsjzkdqr2xch8asans) | `public/models/world-cup-final/football.glb` | Accepted |
 | Outfield roster | [Mint chat](https://mint.gg/chat/ph797348b0e47k2hstbtrz19fd8asama) | `players/spain-outfield.glb`, `players/argentina-outfield.glb` | Accepted |
 | Goalkeeper roster | [Mint chat](https://mint.gg/chat/ph7bhc6jvfkaemc0vpxvbpx31n8arjb9) | `players/spain-goalkeeper.glb`, `players/argentina-goalkeeper.glb` | Accepted |
@@ -107,13 +108,16 @@ No runtime path references a partial, failed, or rejected pass.
 - The replacement classic football is a valid 842,968-byte GLB with one mesh,
   one material, three textures, nonzero bounds, and a visually inspected white
   surface with black panels.
-- One hundred sixty-two clones from four dedicated Mint fan rigs fill three
-  long-stand rows and two rows behind each goal. Only seated motions are loaded:
+- Four hundred fourteen clones from four dedicated Mint fan rigs fill four
+  long-stand rows and three rows behind each goal. Only seated motions are loaded:
   every spectator crossfades from seated idle into a varied seated cheer when
   either team scores.
-- Browser QA confirmed the smaller classic ball, outward-facing net depth on
-  two identically constructed goals, the full four-sided supporter cast,
-  score-triggered cheering, the wide broadcast view, and zero console errors.
+- The three sideline-kit GLBs identify as valid glTF binary models and their
+  Mint previews were inspected before runtime placement.
+- Browser QA confirmed the smaller classic ball, inward-facing openings and
+  outward net depth on two identically constructed goals, the packed four-sided
+  supporter cast, score-triggered cheering, screen-relative movement, the wide
+  broadcast view, and zero console errors.
 
 ## Runtime Layout
 
@@ -126,6 +130,9 @@ No runtime path references a partial, failed, or rejected pass.
   attached, passed, shot, bounced, saved, and scored by the gameplay simulation.
 - Both goal assets face into the pitch so their net depth extends outside the
   field of play.
+- Fourteen blank pitchside boards line the touchlines; two dugouts and two
+  equipment stations occupy the near technical area without entering playable
+  bounds.
 - Stadium stands are reused instances from the accepted crowdless Mint family.
 - The far and end sections stay close to the pitch while the near grandstand is
   placed behind the broadcast camera, creating a larger bowl without blocking

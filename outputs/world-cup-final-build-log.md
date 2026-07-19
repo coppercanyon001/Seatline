@@ -341,8 +341,8 @@ crowdless Mint grandstand modules in
 The visually inspected straight and corner modules contain empty red, gold, and
 navy seats with no embedded people.
 
-The finished stadium uses 162 seated clones from the four-person fan family.
-Every fan remains in a seated motion and all 162 crossfade into varied seated
+The finished stadium uses 414 seated clones from the four-person fan family.
+Every fan remains in a seated motion and all 414 crossfade into varied seated
 cheers on either goal.
 
 The gameplay pass also added:
@@ -368,3 +368,45 @@ Production and diagnostic captures:
 The last browser pass confirmed grounded players, a readable black-and-white
 ball, identical goal construction, only the dedicated fan family in the
 stands, synchronized seated cheering, and no runtime errors.
+
+## Chapter 15 — Packed Bowl, Technical Areas, and Screen-Relative Control
+
+The final stadium review asked for four concrete corrections at once: both goal
+mouths needed to face inward, the seating needed to feel larger and full, the
+touchlines needed match-day equipment, and movement needed to match the
+broadcast camera.
+
+The shared goal helper still constructs both frames from the same Mint model,
+but the two instances now use mirrored rotations. Their openings face the
+field while each net volume extends safely behind its goal line.
+
+The stand modules were enlarged conservatively after a larger first test pulled
+their canopies into the camera. Crowd placement then expanded to 414 animated
+supporters across four long-side rows and three end rows. Row heights were
+lowered after visual QA so every person remains seated inside the stands rather
+than appearing above the roof.
+
+Mint generated a dedicated technical-area kit in
+[this asset chat](https://mint.gg/chat/ph782z5v5cdp4b99j77czrag9x8arrh2):
+
+- two six-seat team dugouts;
+- fourteen blank pitchside boards;
+- two ball, towel, bottle, and cone equipment stations.
+
+The three previews were inspected before the valid GLBs were imported. Runtime
+placement keeps every prop outside the playable `Z ±10.8` boundary.
+
+Finally, the input vector was remapped to screen space: `W`/up is negative
+world Z, `S`/down is positive world Z, and `A`/`D` map directly to negative and
+positive world X. Passing and shooting reuse the same vector, so movement and
+aim now agree.
+
+New Mint tutorial assets:
+
+- `24-team-dugout-mint-preview.webp`
+- `25-pitchside-board-mint-preview.webp`
+- `26-equipment-station-mint-preview.webp`
+
+Browser QA exercised up-screen and right-screen movement, forced a goal, saw
+the entire crowd enter its seated cheer, confirmed both net depths outside the
+pitch, and reported no runtime errors.

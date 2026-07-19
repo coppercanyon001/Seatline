@@ -18,11 +18,15 @@ animation playback, collision checks, camera work, AI, and game logic.
 - Play a 150-second final; a draw goes to golden goal.
 - Use a wide, gently tracking broadcast camera with support runs, assisted
   passing, contextual player switching, and a live possession readout.
-- Play inside a large crowdless Mint stadium populated exclusively by 162
+- Play inside a large crowdless Mint stadium populated exclusively by 414
   seated clones from a four-person supporter cast. Every fan performs a seated
   cheer whenever either team scores.
 - Track a compact classic black-and-white Mint football between correctly
   oriented goals.
+- Read movement directly from the broadcast camera: up moves up-screen, left
+  moves left-screen, and the same direction guides passes and shots.
+- Play past Mint dugouts, blank pitchside boards, and an equipment station
+  placed along both touchlines.
 - Use the touch-sized movement and action controls on mobile.
 
 ## Mint Asset Policy
@@ -75,7 +79,7 @@ outputs/world-cup-final-capture-checklist.md
 ## Tutorial Pack
 
 The `outputs/` folder contains a live production diary, a finished step-by-step
-tutorial, a narration script, a video capture checklist, eleven Mint asset
+tutorial, a narration script, a video capture checklist, fourteen Mint asset
 previews, and twelve browser screenshots covering both accepted and pivoted
 production stages.
 

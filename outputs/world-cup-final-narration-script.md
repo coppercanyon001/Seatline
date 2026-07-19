@@ -90,10 +90,21 @@ actions, a home position, and short action locks.”
 “The original grandstands contained spectators baked into one mesh. That made
 it impossible for the new people to be the only fans, so Mint generated a
 crowdless straight and corner kit. Four new supporter rigs received seated
-animation sets, and 162 clones now fill the bowl. Every one stays seated and
+animation sets, and 414 clones now fill the bowl. Every one stays seated and
 crossfades into a varied cheer after either team scores.”
 
-## 5:15–5:50 — QA the Whole Journey
+## 5:15–5:40 — Finish the Technical Areas and Controls
+
+**On screen:** Mint previews 24–26, the two inward-facing goals, then a short
+`W` and `D` movement demonstration.
+
+**Narration:**
+“The last pass adds a Mint dugout, blank boards, and a stocked equipment station
+outside the playable touchlines. Both identical goal mouths now face the field,
+with their net depth behind the line. Movement and aiming were remapped to the
+broadcast view, so every direction now matches what the player sees.”
+
+## 5:40–6:10 — QA the Whole Journey
 
 **On screen:** `11-goal-spain.png`, golden-goal HUD, then
 `12-spain-champions.png` and `23-final-all-fans-seated-cheer.png`.
@@ -105,7 +116,7 @@ pass verified the wide camera, passing, through balls, grounded players, ball
 visibility, identical goals, synchronized seated cheering, and a clean
 console.”
 
-## 5:50–6:15 — Close
+## 6:10–6:35 — Close
 
 **On screen:** Final menu, source filenames, and deployed URL.
 

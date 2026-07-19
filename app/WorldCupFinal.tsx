@@ -265,7 +265,7 @@ export default function WorldCupFinal() {
         const addStand = (corner: boolean, x: number, z: number, rotation: number) => {
           const source = sourceScene(corner ? ASSETS.world.cornerStand : ASSETS.world.straightStand);
           source.rotation.y = Math.PI / 2;
-          const stand = fitHeight(source, corner ? 5.15 : 5.35);
+          const stand = fitHeight(source, corner ? 5.3 : 5.55);
           stand.position.set(x, corner ? 0.08 : 0, z);
           stand.rotation.y = rotation;
           stadium.add(stand);
@@ -290,8 +290,8 @@ export default function WorldCupFinal() {
           stadium.add(goal);
           return goal;
         };
-        createGoal(-15.05, -Math.PI / 2);
-        createGoal(15.05, Math.PI / 2);
+        createGoal(-15.05, Math.PI / 2);
+        createGoal(15.05, -Math.PI / 2);
 
         for (const [x, z, rotation] of [
           [-14.8, -10.5, 0],
@@ -303,6 +303,27 @@ export default function WorldCupFinal() {
           flag.position.set(x, pitchSurfaceY + 0.02, z);
           flag.rotation.y = rotation;
           stadium.add(flag);
+        }
+
+        for (const z of [-11.45, 11.45]) {
+          for (const x of [-12, -8, -4, 0, 4, 8, 12]) {
+            const board = fitLargest(sourceScene(ASSETS.world.pitchsideBoard), 3.9);
+            board.position.set(x, pitchSurfaceY + 0.02, z);
+            board.rotation.y = z > 0 ? -Math.PI / 2 : Math.PI / 2;
+            stadium.add(board);
+          }
+        }
+        for (const x of [-6.5, 6.5]) {
+          const dugout = fitLargest(sourceScene(ASSETS.world.teamDugout), 5.7);
+          dugout.position.set(x, pitchSurfaceY + 0.02, 14.35);
+          dugout.rotation.y = Math.PI / 2;
+          stadium.add(dugout);
+        }
+        for (const x of [-11.25, 11.25]) {
+          const equipment = fitHeight(sourceScene(ASSETS.world.equipmentStation), 1.7);
+          equipment.position.set(x, pitchSurfaceY + 0.02, 13.55);
+          equipment.rotation.y = Math.PI;
+          stadium.add(equipment);
         }
 
         const celebrationRoot = new THREE.Group();
@@ -427,11 +448,12 @@ export default function WorldCupFinal() {
           actions.idle.time = (spectators.length % 7) * 0.17;
           spectators.push({ root, mixer, actions, currentAction: "idle" });
         };
-        const supporterXs = Array.from({ length: 21 }, (_, index) => -25 + index * 2.5);
+        const supporterXs = Array.from({ length: 33 }, (_, index) => -25 + index * (50 / 32));
         const sideRows = [
-          { farZ: -12.95, nearZ: 31.75, y: 1.25, height: 1.5 },
-          { farZ: -14.6, nearZ: 33.4, y: 2.55, height: 1.54 },
-          { farZ: -16.25, nearZ: 35.05, y: 4.0, height: 1.58 },
+          { farZ: -12.55, nearZ: 31.35, y: 0.75, height: 1.65 },
+          { farZ: -13.9, nearZ: 32.7, y: 1.55, height: 1.68 },
+          { farZ: -15.3, nearZ: 34.1, y: 2.35, height: 1.71 },
+          { farZ: -16.75, nearZ: 35.55, y: 3.15, height: 1.74 },
         ] as const;
         sideRows.forEach((row, rowIndex) => {
           supporterXs.forEach((x, index) => {
@@ -453,10 +475,11 @@ export default function WorldCupFinal() {
             );
           });
         });
-        const endSupporterZs = [-9, -6.75, -4.5, -2.25, 0, 2.25, 4.5, 6.75, 9];
+        const endSupporterZs = Array.from({ length: 25 }, (_, index) => -10 + index * 1.5);
         const endRows = [
-          { x: 21.45, y: 1.35, height: 1.5 },
-          { x: 23.45, y: 3.25, height: 1.56 },
+          { x: 20.1, y: 0.75, height: 1.66 },
+          { x: 22.25, y: 1.75, height: 1.7 },
+          { x: 24.3, y: 2.85, height: 1.74 },
         ] as const;
         endRows.forEach((row, rowIndex) => {
           endSupporterZs.forEach((z, index) => {
@@ -585,9 +608,9 @@ export default function WorldCupFinal() {
         };
         const readInputDirection = () =>
           new THREE.Vector3(
-            (held.has("up") ? 1 : 0) - (held.has("down") ? 1 : 0),
-            0,
             (held.has("right") ? 1 : 0) - (held.has("left") ? 1 : 0),
+            0,
+            (held.has("down") ? 1 : 0) - (held.has("up") ? 1 : 0),
           );
         const selectPassTarget = (player: Player, through: boolean) => {
           const attack = new THREE.Vector3(player.team === "spain" ? 1 : -1, 0, 0);

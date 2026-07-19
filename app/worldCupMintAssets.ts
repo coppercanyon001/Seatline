@@ -8,6 +8,9 @@ export const WORLD_CUP_MINT_ASSETS = {
     cornerFlag: "/models/world-cup-final/corner-flag.glb",
     trophy: "/models/world-cup-final/trophy.glb",
     confetti: "/models/world-cup-final/confetti.glb",
+    teamDugout: "/models/world-cup-final/team-dugout.glb",
+    pitchsideBoard: "/models/world-cup-final/pitchside-board.glb",
+    equipmentStation: "/models/world-cup-final/equipment-station.glb",
   },
   characters: {
     spainOutfield: {

@@ -263,7 +263,7 @@ proved the event routing, but it did not satisfy the final art direction:
 supporters needed their own identities, every motion needed to stay seated, and
 the grandstand could not contain baked people.
 
-The production crowd therefore uses four new fan rigs and 162 runtime clones.
+The production crowd therefore uses four new fan rigs and 414 runtime clones.
 Three rows fill each long grandstand and two rows fill both ends. Every clone
 owns an animation mixer, starts with its fan-specific seated idle clip, and
 crossfades to a varied seated celebration when the scoring event fires. Routing
@@ -296,6 +296,41 @@ Final captures:
 - `outputs/world-cup-final-tutorial-assets/21-empty-corner-stand-preview.webp`
 - `outputs/world-cup-final-tutorial-assets/22-final-wide-empty-stands-seated-crowd.png`
 - `outputs/world-cup-final-tutorial-assets/23-final-all-fans-seated-cheer.png`
+
+## Final Revision: Technical Areas and Camera-Relative Input
+
+The last stadium pass combined visual composition and control correction.
+Both goal instances keep the same model and scale, but their mirrored
+rotations make the mouths face the field and place the net depth outside the
+goal lines.
+
+The stand scale increased only enough to strengthen the seating silhouette.
+A larger experiment made the canopies cross the camera, so browser QA drove a
+safer value. The supporter grid grew to 414 clones across four long-side rows
+and three end rows. Lower row baselines keep every fan seated within the
+grandstand structure, while the existing score event still crossfades every
+mixer into its fan-specific seated cheer.
+
+Mint supplied a final three-model sideline family:
+
+- an empty six-seat dugout;
+- a blank modular pitchside board;
+- a stocked ball, cone, towel, and bottle station.
+
+Three.js scales, rotates, and repeats those accepted assets outside the
+playable touchlines. Fourteen boards cover both sides, while two dugouts and
+two equipment stations define the near technical area.
+
+The old input vector treated command names as world axes, which made the
+broadcast camera feel rotated. The corrected mapping is screen-relative:
+`W`/up moves toward the top of the display, `S`/down toward the bottom, and
+`A`/`D` left and right. Pass and shot aiming read the same vector.
+
+Additional tutorial assets:
+
+- `outputs/world-cup-final-tutorial-assets/24-team-dugout-mint-preview.webp`
+- `outputs/world-cup-final-tutorial-assets/25-pitchside-board-mint-preview.webp`
+- `outputs/world-cup-final-tutorial-assets/26-equipment-station-mint-preview.webp`
 
 ## Reusable Lessons
 
