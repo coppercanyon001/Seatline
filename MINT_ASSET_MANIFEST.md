@@ -29,6 +29,16 @@ and targets the geometric center from the seat camera. Times Square retains its
 current wide-screen route. All projection surfaces remain blank, neutral,
 non-emissive Mint geometry.
 
+## Wall-Mounted Screen Finish
+
+The final July 21 screenshot pass mounts every blank projection surface at its
+venue's authored front-wall anchor and enlarges it to cover the intended wall
+opening. All three rooms now reuse the validated Mint IMAX screen mesh, scaled
+data-first to either the 1.43:1 or 1.90:1 target ratio. Runtime render ordering
+gives the Mint screen authoritative ownership of the front-wall projection
+area while keeping every Mint chair and aisle fixture visibly in front. No new
+geometry, material, texture, image, video, or procedural surface was added.
+
 ## Version 2 Full-Auditorium Contract
 
 The July 20 revision replaces the sparse modular presentation with one

@@ -71,8 +71,7 @@ function TheaterPreview({
         renderer.toneMappingExposure = 1.24;
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFShadowMap;
-        const screenPlaneZ =
-          theater.baseZ - theater.screenDepthFromFirstRow;
+        const screenPlaneZ = theater.screenZ + 0.28;
 
         scene.add(new THREE.AmbientLight(0x7181aa, 2));
         scene.add(new THREE.HemisphereLight(0xa9bce4, 0x321916, 2.15));
@@ -168,6 +167,18 @@ function TheaterPreview({
           if (!mesh.isMesh) return;
           mesh.castShadow = false;
           mesh.receiveShadow = false;
+          mesh.renderOrder = 1;
+          const materials = Array.isArray(mesh.material)
+            ? mesh.material
+            : [mesh.material];
+          materials.forEach((material) => {
+            material.depthTest = true;
+            material.depthWrite = true;
+            material.polygonOffset = true;
+            material.polygonOffsetFactor = -2;
+            material.polygonOffsetUnits = -2;
+            material.needsUpdate = true;
+          });
         });
         scene.add(screen);
 
@@ -182,6 +193,8 @@ function TheaterPreview({
           chair.userData.seatId = seat.id;
           chair.userData.baseScale = 1;
           chair.traverse((child) => {
+            const mesh = child as import("three").Mesh;
+            if (mesh.isMesh) mesh.renderOrder = 2;
             child.userData.seatId = seat.id;
             child.userData.selectable = seat.status !== "occupied";
           });
@@ -202,6 +215,10 @@ function TheaterPreview({
           for (const x of [-theater.roomWidth * 0.43, theater.roomWidth * 0.43]) {
             const beacon = beaconTemplate.clone(true);
             beacon.position.set(x, y, z);
+            beacon.traverse((child) => {
+              const mesh = child as import("three").Mesh;
+              if (mesh.isMesh) mesh.renderOrder = 2;
+            });
             scene.add(beacon);
             const light = new THREE.PointLight(0xffb65b, 1.6, 2.8, 2);
             light.position.set(x, y + 0.25, z);
@@ -214,6 +231,7 @@ function TheaterPreview({
         const currentLook = new THREE.Vector3();
         const screenHeight = theater.screenWidth / theater.screenAspect;
         const screenCenterY = theater.screenBaseY + screenHeight * 0.5;
+        const isTallScreen = theater.screenAspect <= 1.5;
         const selectedLight = new THREE.PointLight(0xffc46a, 0, 3.2, 2);
         scene.add(selectedLight);
 
@@ -251,11 +269,11 @@ function TheaterPreview({
           setIsSeatView(true);
           targetPosition.set(
             seatPosition.x,
-            seatPosition.y + (theater.screen === "imax" ? 1.88 : 1.68),
+            seatPosition.y + (isTallScreen ? 1.88 : 1.68),
             seatPosition.z - 0.22,
           );
           targetLook.set(0, screenCenterY, screenPlaneZ);
-          camera.fov = theater.screen === "imax" ? 72 : 66;
+          camera.fov = isTallScreen ? 72 : 66;
           camera.updateProjectionMatrix();
           selectedLight.position.set(
             seatPosition.x,
