@@ -71,6 +71,7 @@ function TheaterPreview({
         renderer.toneMappingExposure = 1.24;
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFShadowMap;
+        renderer.localClippingEnabled = true;
         const screenPlaneZ = theater.screenZ + theater.screenWallOffset;
 
         scene.add(new THREE.AmbientLight(0x7181aa, 2));
@@ -157,6 +158,7 @@ function TheaterPreview({
           return hit ? hit.point.y + 0.04 : fallback;
         };
 
+        const screenHeight = theater.screenWidth / theater.screenAspect;
         const screen = fitWidth(screenGltf.scene, theater.screenWidth);
         const authoredScreenAspect = theater.screen === "imax" ? 1.481 : 1.448;
         screen.scale.y *= authoredScreenAspect / theater.screenAspect;
@@ -177,6 +179,15 @@ function TheaterPreview({
             material.polygonOffset = true;
             material.polygonOffsetFactor = -2;
             material.polygonOffsetUnits = -2;
+            material.clippingPlanes = theater.screenBottomCrop
+              ? [
+                  new THREE.Plane(
+                    new THREE.Vector3(0, 1, 0),
+                    -(theater.screenBaseY +
+                      screenHeight * theater.screenBottomCrop),
+                  ),
+                ]
+              : null;
             material.needsUpdate = true;
           });
         });
@@ -229,8 +240,9 @@ function TheaterPreview({
         const targetPosition = new THREE.Vector3();
         const targetLook = new THREE.Vector3();
         const currentLook = new THREE.Vector3();
-        const screenHeight = theater.screenWidth / theater.screenAspect;
-        const screenCenterY = theater.screenBaseY + screenHeight * 0.5;
+        const screenCenterY =
+          theater.screenBaseY +
+          screenHeight * (0.5 + theater.screenBottomCrop * 0.5);
         const isTallScreen = theater.screenAspect <= 1.5;
         const selectedLight = new THREE.PointLight(0xffc46a, 0, 3.2, 2);
         scene.add(selectedLight);

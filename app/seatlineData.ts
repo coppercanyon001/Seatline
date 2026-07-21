@@ -52,6 +52,7 @@ export type Theater = {
   screenBaseY: number;
   screenWallOffset: number;
   screenDepthScale: number;
+  screenBottomCrop: number;
   screenDepthFromFirstRow: number;
   screenZ: number;
   baseZ: number;
@@ -98,6 +99,7 @@ export const THEATERS: Theater[] = [
     screenBaseY: 0.4,
     screenWallOffset: 0.28,
     screenDepthScale: 0.08,
+    screenBottomCrop: 0,
     screenDepthFromFirstRow: 9.2,
     screenZ: -12.2,
     baseZ: -3,
@@ -134,11 +136,12 @@ export const THEATERS: Theater[] = [
     roomWidth: 27,
     roomDepth: 23,
     roomHeight: 13,
-    screenWidth: 22,
+    screenWidth: 19,
     screenAspect: 1.9,
-    screenBaseY: 0.45,
-    screenWallOffset: 0.62,
-    screenDepthScale: 0.22,
+    screenBaseY: 1.1,
+    screenWallOffset: 0.12,
+    screenDepthScale: 0.06,
+    screenBottomCrop: 0.16,
     screenDepthFromFirstRow: 7.4,
     screenZ: -10.2,
     baseZ: -2.8,
@@ -176,11 +179,12 @@ export const THEATERS: Theater[] = [
     roomWidth: 22,
     roomDepth: 18,
     roomHeight: 10,
-    screenWidth: 18.2,
+    screenWidth: 14.5,
     screenAspect: 1.9,
-    screenBaseY: 0.2,
-    screenWallOffset: 0.28,
-    screenDepthScale: 0.08,
+    screenBaseY: 1.15,
+    screenWallOffset: 0.1,
+    screenDepthScale: 0.06,
+    screenBottomCrop: 0.16,
     screenDepthFromFirstRow: 5.7,
     screenZ: -7.7,
     baseZ: -2,

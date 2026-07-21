@@ -48,6 +48,16 @@ enough surrounding wall reveal for the projection surface to read as a real
 screen instead of an empty frame. The Mint screen casts its own restrained
 architectural shadow; its authored material remains blank and unmodified.
 
+## Wide-Screen Wall Fit
+
+The next July 21 review reduces the Times Square and Downtown Brooklyn screen
+widths so the authored front walls remain visible around each projection
+surface. Both screens are embedded shallowly into their wall planes with a
+thin physical profile, removing the freestanding-panel read while preserving
+the Mint screen's blank material and frame. A venue-specific render clip hides
+only the source model's lower freestanding support hardware below the mounted
+screen edge. Lincoln Square remains unchanged.
+
 ## Version 2 Full-Auditorium Contract
 
 The July 20 revision replaces the sparse modular presentation with one
