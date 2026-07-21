@@ -19,6 +19,8 @@ accessible interaction.
 - Every selectable seat maps to a stable 3D position and camera target.
 - The camera settles at seated eye height and looks toward the center of the
   visible Mint screen.
+- The projection surface remains blank, neutral, and non-emissive in every
+  venue and camera state.
 - The mini seat map, selected seat label, row, price, and 3D view must stay in
   sync.
 - Sold and accessible-companion seats are visibly and programmatically

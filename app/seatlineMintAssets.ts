@@ -1,18 +1,19 @@
 export const SEATLINE_MINT_ASSETS = {
   shells: {
-    monument: "/models/seatline/monument-imax-shell.glb",
-    midtown: "/models/seatline/midtown-grand-shell.glb",
+    monument: "/models/seatline-v2/lincoln-imax-auditorium.glb",
+    midtown: "/models/seatline-v2/times-square-premium-auditorium.glb",
+    brooklyn: "/models/seatline-v2/brooklyn-table-auditorium.glb",
   },
   screens: {
-    imax: "/models/seatline/imax-screen.glb",
-    wide: "/models/seatline/imax-screen.glb",
+    imax: "/models/seatline-v2/tall-blank-screen.glb",
+    wide: "/models/seatline-v2/wide-blank-screen.glb",
   },
   chairs: {
-    cinema: "/models/seatline/cinema-recliner.glb",
-    dineIn: "/models/seatline/dine-in-recliner.glb",
+    cinema: "/models/seatline-v2/premium-recliner.glb",
+    dineIn: "/models/seatline-v2/dine-in-recliner.glb",
   },
   fixtures: {
-    aisleBeacon: "/models/seatline/aisle-beacon.glb",
+    aisleBeacon: "/models/seatline-v2/aisle-beacon.glb",
   },
   images: {
     mythicSea: "/images/seatline/mythic-sea-tableau.png",

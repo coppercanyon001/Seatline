@@ -152,7 +152,7 @@ export const THEATERS: Theater[] = [
     distance: "3.4 mi",
     sourceUrl:
       "https://drafthouse.com/nyc/theater/downtown-brooklyn",
-    shell: "midtown",
+    shell: "brooklyn",
     screen: "wide",
     chair: "dineIn",
     rows: 7,
@@ -165,10 +165,10 @@ export const THEATERS: Theater[] = [
     screenZ: -7.7,
     baseZ: -2,
     seatBaseY: 0.48,
-    rowSpacing: 1.2,
+    rowSpacing: 1.5,
     rowRise: 0.48,
-    seatSpacing: 1.34,
-    chairWidth: 1.12,
+    seatSpacing: 1.48,
+    chairWidth: 0.9,
     seed: 10,
     defaultSeat: "D6",
     showtimes: [

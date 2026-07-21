@@ -68,48 +68,32 @@ function TheaterPreview({
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.7));
         renderer.outputColorSpace = THREE.SRGBColorSpace;
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 0.94;
+        renderer.toneMappingExposure = 1.24;
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFShadowMap;
         const screenPlaneZ =
-          theater.screen === "wide"
-            ? theater.baseZ - 1.25
-            : theater.screenZ + 0.12;
+          theater.baseZ - Math.max(3, theater.screenWidth * 0.18);
 
-        scene.add(new THREE.AmbientLight(0x5c6a91, 0.7));
-        const screenGlow = new THREE.PointLight(
-          0x96bcff,
-          theater.shell === "brooklyn" ? 12 : 32,
-          34,
-          1.65,
-        );
-        screenGlow.position.set(0, theater.roomHeight * 0.32, theater.screenZ + 1.4);
-        scene.add(screenGlow);
-        const warmLight = new THREE.DirectionalLight(0xffc786, 2.2);
+        scene.add(new THREE.AmbientLight(0x7181aa, 2));
+        scene.add(new THREE.HemisphereLight(0xa9bce4, 0x321916, 2.15));
+        const warmLight = new THREE.DirectionalLight(0xffc786, 3.2);
         warmLight.position.set(-8, theater.roomHeight, 10);
         warmLight.castShadow = true;
         warmLight.shadow.mapSize.set(1024, 1024);
         scene.add(warmLight);
-        const rimLight = new THREE.DirectionalLight(0x6c7dff, 1.4);
+        const rimLight = new THREE.DirectionalLight(0x6c7dff, 2);
         rimLight.position.set(10, 8, -8);
         scene.add(rimLight);
 
         const loader = new GLTFLoader();
-        const [shellGltf, screenGltf, chairGltf, beaconGltf, screenTexture] =
+        const [shellGltf, screenGltf, chairGltf, beaconGltf] =
           await Promise.all([
             loader.loadAsync(ASSETS.shells[theater.shell]),
             loader.loadAsync(ASSETS.screens[theater.screen]),
             loader.loadAsync(ASSETS.chairs[theater.chair]),
             loader.loadAsync(ASSETS.fixtures.aisleBeacon),
-            new THREE.TextureLoader().loadAsync(ASSETS.images.mythicSea),
           ]);
         if (disposed) return;
-        screenTexture.colorSpace = THREE.SRGBColorSpace;
-        screenTexture.wrapS = THREE.ClampToEdgeWrapping;
-        screenTexture.wrapT = THREE.ClampToEdgeWrapping;
-        screenTexture.magFilter = THREE.LinearFilter;
-        screenTexture.minFilter = THREE.LinearMipmapLinearFilter;
-        screenTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
 
         const prepare = (object: import("three").Object3D) => {
           object.traverse((child) => {
@@ -141,8 +125,20 @@ function TheaterPreview({
 
         const shell = fitWidth(shellGltf.scene, theater.roomWidth);
         shell.rotation.y = Math.PI;
+        shell.traverse((child) => {
+          const mesh = child as import("three").Mesh;
+          if (!mesh.isMesh) return;
+          const materials = Array.isArray(mesh.material)
+            ? mesh.material
+            : [mesh.material];
+          materials.forEach((material) => {
+            material.side = THREE.DoubleSide;
+            material.needsUpdate = true;
+          });
+        });
         scene.add(shell);
         shell.updateMatrixWorld(true);
+        const shellBounds = new THREE.Box3().setFromObject(shell);
 
         const floorRaycaster = new THREE.Raycaster();
         const floorOrigin = new THREE.Vector3();
@@ -163,49 +159,13 @@ function TheaterPreview({
         };
 
         const screen = fitWidth(screenGltf.scene, theater.screenWidth);
-        if (theater.screen === "wide") screen.scale.y = 0.72;
         screen.scale.z = 0.08;
         screen.position.set(0, 0.16, screenPlaneZ);
         screen.traverse((child) => {
           const mesh = child as import("three").Mesh;
           if (!mesh.isMesh) return;
-          mesh.geometry = mesh.geometry.clone();
-          const position = mesh.geometry.getAttribute("position");
-          const bounds = new THREE.Box3().setFromBufferAttribute(
-            position as import("three").BufferAttribute,
-          );
-          const width = Math.max(bounds.max.x - bounds.min.x, 0.001);
-          const height = Math.max(bounds.max.y - bounds.min.y, 0.001);
-          const planarUv = new Float32Array(position.count * 2);
-          for (let index = 0; index < position.count; index += 1) {
-            planarUv[index * 2] = (position.getX(index) - bounds.min.x) / width;
-            planarUv[index * 2 + 1] =
-              (position.getY(index) - bounds.min.y) / height;
-          }
-          mesh.geometry.setAttribute(
-            "uv",
-            new THREE.BufferAttribute(planarUv, 2),
-          );
           mesh.castShadow = false;
           mesh.receiveShadow = false;
-
-          const original = Array.isArray(mesh.material)
-            ? mesh.material[0]
-            : mesh.material;
-          const material = (original as import("three").MeshStandardMaterial).clone();
-          material.color.set(0x000000);
-          material.map = null;
-          material.emissive = new THREE.Color(0xffffff);
-          material.emissiveMap = screenTexture;
-          material.emissiveIntensity = 0.88;
-          material.normalMap = null;
-          material.metalnessMap = null;
-          material.roughnessMap = null;
-          material.metalness = 0;
-          material.roughness = 0.92;
-          material.side = THREE.DoubleSide;
-          material.needsUpdate = true;
-          mesh.material = material;
         });
         scene.add(screen);
 
@@ -249,20 +209,31 @@ function TheaterPreview({
         const targetPosition = new THREE.Vector3();
         const targetLook = new THREE.Vector3();
         const currentLook = new THREE.Vector3();
+        const screenHeight =
+          theater.screenWidth / (theater.screen === "imax" ? 1.43 : 1.9);
+        const screenCenterY = 0.16 + screenHeight * 0.32;
         const selectedLight = new THREE.PointLight(0xffc46a, 0, 3.2, 2);
         scene.add(selectedLight);
 
         const setOverview = (instant = false) => {
           setIsSeatView(false);
-          targetPosition.set(
-            0,
-            theater.roomHeight * 0.58,
-            theater.roomDepth * 0.3,
+          const overviewZ = Math.min(
+            theater.roomDepth * 0.22,
+            shellBounds.max.z - 1.5,
           );
-          targetLook.set(0, theater.screenWidth * 0.24, screenPlaneZ);
+          const overviewFloorY = floorAt(
+            0,
+            overviewZ,
+            theater.seatBaseY + theater.rows * theater.rowRise,
+          );
+          targetPosition.set(0, overviewFloorY + 4.6, overviewZ);
+          targetLook.set(0, screenCenterY, screenPlaneZ);
           camera.fov = 58;
           camera.updateProjectionMatrix();
           selectedLight.intensity = 0;
+          seatRoots.forEach((root) => {
+            root.visible = true;
+          });
           if (instant) {
             camera.position.copy(targetPosition);
             currentLook.copy(targetLook);
@@ -281,7 +252,7 @@ function TheaterPreview({
             seatPosition.y + (theater.screen === "imax" ? 1.88 : 1.68),
             seatPosition.z - 0.22,
           );
-          targetLook.set(0, theater.screenWidth * 0.31, screenPlaneZ);
+          targetLook.set(0, screenCenterY, screenPlaneZ);
           camera.fov = theater.screen === "imax" ? 72 : 66;
           camera.updateProjectionMatrix();
           selectedLight.position.set(
@@ -292,6 +263,7 @@ function TheaterPreview({
           selectedLight.intensity = 6;
           seatRoots.forEach((root, id) => {
             root.userData.targetScale = id === seatId ? 1.08 : 1;
+            root.visible = id !== seatId;
           });
           if (instant) {
             camera.position.copy(targetPosition);
@@ -364,7 +336,6 @@ function TheaterPreview({
               : [mesh.material];
             materials.forEach((material) => material.dispose());
           });
-          screenTexture.dispose();
           renderer.dispose();
         };
       } catch (reason) {

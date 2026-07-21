@@ -3,6 +3,49 @@
 Date: 2026-07-18  
 Project: A 3D seat-sightline ticket preview for *The Odyssey* in New York City.
 
+## Version 2 Full-Auditorium Contract
+
+The July 20 revision replaces the sparse modular presentation with one
+cohesive Mint-authored interior family. The film screen remains blank in every
+camera view; no still, trailer frame, emissive artwork, or projected image is
+applied at runtime.
+
+- **Architectural language:** premium contemporary New York cinema with matte
+  charcoal acoustic panels, dark walnut bands, oxblood upholstery, satin-black
+  metal, restrained aged-brass details, and low warm aisle illumination.
+- **Full-room ownership:** each venue shell owns its complete visible floor,
+  stepped risers, side walls, rear wall, ceiling, acoustic treatment, portals,
+  handrails, and architectural lighting housings as one contained 3D asset.
+- **Camera envelope:** the room is open only at the invisible rear camera cut;
+  seated eye-level views must never reveal a void outside the authored room.
+- **Separate interactive seating:** shells contain no chairs. Matching Mint
+  chair assets remain individually cloned so seat selection and camera anchors
+  stay exact.
+- **Separate blank screens:** tall and wide screen assets own their frames and
+  neutral unlit projection surfaces. Runtime code may position and scale them,
+  but may not apply film artwork, emissive imagery, video, or procedural color.
+- **Orientation:** `+Y` up, audience-to-screen semantic forward is local `-Z`,
+  floor baseline at `Y = 0`, centered origin, nonzero bounds.
+- **Forbidden:** people, food, logos, text, posters, film imagery, baked chairs,
+  baked screens, exterior facades, floating fragments, disconnected panels,
+  foreground walls that cross the sightline, or open black voids.
+
+### Version 2 Production Family
+
+Expected format: eight static PBR GLBs generated together as one coherent Mint
+interior pack.
+
+| Semantic asset | Acceptance criteria | Intended runtime path | Status |
+| --- | --- | --- | --- |
+| Lincoln monument IMAX auditorium | Complete tall enclosed room, steep risers, two aisles, tall front opening, no chairs or screen | `public/models/seatline-v2/lincoln-imax-auditorium.glb` | Accepted |
+| Times Square premium auditorium | Complete wide enclosed room, moderate rake, two aisles, broad front opening, no chairs or screen | `public/models/seatline-v2/times-square-premium-auditorium.glb` | Accepted |
+| Brooklyn table auditorium | Complete intimate enclosed dine-in room, shallow rake, center aisle, wide front opening, no chairs, tables, or screen | `public/models/seatline-v2/brooklyn-table-auditorium.glb` | Accepted after clean-shell regeneration |
+| Oxblood premium recliner | Matching compact cinema recliner, front toward `-Z`, no logos | `public/models/seatline-v2/premium-recliner.glb` | Accepted |
+| Oxblood dine-in recliner | Matching recliner with attached walnut side table, front toward `-Z`, no food or text | `public/models/seatline-v2/dine-in-recliner.glb` | Accepted with wider Brooklyn row pitch |
+| Tall blank projection screen | Neutral unlit 1.43:1 surface with slim satin-black frame | `public/models/seatline-v2/tall-blank-screen.glb` | Accepted after landscape-ratio regeneration |
+| Wide blank projection screen | Neutral unlit 1.90:1 surface with slim satin-black frame | `public/models/seatline-v2/wide-blank-screen.glb` | Accepted |
+| Recessed brass aisle beacon | Low shielded warm fixture matching both room and chair family | `public/models/seatline-v2/aisle-beacon.glb` | Accepted |
+
 ## Production Boundary
 
 Every visible or audible production asset and all theater world content must
@@ -101,6 +144,9 @@ The authoritative semantic-to-local path map lives in
 
 | Family | Mint source | Decision |
 | --- | --- | --- |
+| Version 2 full-auditorium, blank-screen, chair, and fixture family | [Mint chat](https://mint.gg/chat/ph7321qhj6j50psavngyacga9n8azqsr) | Seven family members accepted; the first Brooklyn shell and portrait IMAX screen were rejected |
+| Clean Brooklyn auditorium correction | [Mint chat](https://mint.gg/chat/ph7cj71g5n0t3b4hynh55z4qxs8az32y) | Accepted after preview, GLB, centered-seat, edge-seat, and overview checks |
+| Landscape 1.43:1 blank IMAX screen correction | [Mint chat](https://mint.gg/chat/ph7b27fprz6qz93486rbjjzjd98ayc8z) | Accepted at measured 1.416:1 geometry; original portrait interpretation rejected |
 | Eight-item theater architecture, screen, seating, and fixture kit | [Mint chat](https://mint.gg/chat/ph73qz63cvmbfgwec1s869g9mn8aty69) | Complete family accepted after preview and GLB validation |
 | Original mythic sea tableau | [Mint chat](https://mint.gg/chat/ph75b3hd7v1yzr4bn3xth8mhz18avr6g) | Accepted after downloaded PNG inspection |
 
@@ -118,7 +164,32 @@ Mint IMAX screen mesh, compressed vertically to the wide presentation ratio,
 with the same Mint mythic-sea artwork. The rejected wide-screen file remains
 local for provenance but is absent from the runtime asset map.
 
+Version 2 supersedes those runtime compromises. The first generated Brooklyn
+candidate was rejected because it baked a projection surface and a stray black
+foreground object into the room. The accepted correction preserves the shared
+walnut-and-charcoal family without either defect. The first Version 2 IMAX
+screen was also rejected because Mint interpreted 1.43:1 as portrait; the
+accepted correction measures 1.416:1 in its final GLB and remains landscape.
+The mythic-sea image remains eligible for deterministic poster art in the DOM,
+but is no longer loaded into or projected on the 3D screen.
+
 ## Completed Structural Validation
+
+- All eight Version 2 runtime GLBs have valid GLB headers and declared byte
+  lengths, one scene, one node, one mesh, one material, three embedded textures,
+  zero animations, and nonzero accessor bounds.
+- Version 2 GLBs range from 557,356 to 941,972 bytes.
+- The corrected IMAX screen measures `0.998 × 0.705 × 0.111` before runtime
+  normalization, for a verified landscape X:Y ratio of `1.416:1`.
+- The screen artwork loader, emissive map, blue projection light, generated UV
+  rewrite, and screen-material override were removed. Both screens now render
+  only their Mint-authored neutral PBR surfaces and do not receive room shadows.
+- The coherent shells use one measured 180-degree room calibration; the chair
+  family retains its independently verified 180-degree facing correction so
+  every back points toward the booking camera and every seat faces the screen.
+- The selected chair is hidden only while its occupant camera is active and is
+  restored for overview mode. Brooklyn uses a 1.5 m row pitch and 0.9 m chair
+  width so the deeper dine-in tables do not collide with the sightline.
 
 - All eight model files have valid GLB headers, declared byte lengths, JSON
   chunks, one scene, one node, one mesh, one material, three textures, zero
