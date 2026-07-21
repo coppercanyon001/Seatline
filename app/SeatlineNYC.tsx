@@ -72,7 +72,7 @@ function TheaterPreview({
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFShadowMap;
         const screenPlaneZ =
-          theater.baseZ - Math.max(3, theater.screenWidth * 0.18);
+          theater.baseZ - theater.screenDepthFromFirstRow;
 
         scene.add(new THREE.AmbientLight(0x7181aa, 2));
         scene.add(new THREE.HemisphereLight(0xa9bce4, 0x321916, 2.15));
@@ -160,7 +160,7 @@ function TheaterPreview({
 
         const screen = fitWidth(screenGltf.scene, theater.screenWidth);
         screen.scale.z = 0.08;
-        screen.position.set(0, 0.16, screenPlaneZ);
+        screen.position.set(0, theater.screenBaseY, screenPlaneZ);
         screen.traverse((child) => {
           const mesh = child as import("three").Mesh;
           if (!mesh.isMesh) return;
@@ -187,7 +187,8 @@ function TheaterPreview({
             seat.status === "occupied"
               ? ((seat.columnIndex % 3) - 1) * 0.018
               : 0;
-          chair.rotation.y = Math.PI + occupiedAngle;
+          const chairFacing = theater.chair === "cinema" ? 0 : Math.PI;
+          chair.rotation.y = chairFacing + occupiedAngle;
           seatRoots.set(seat.id, chair);
           scene.add(chair);
         }
@@ -211,7 +212,7 @@ function TheaterPreview({
         const currentLook = new THREE.Vector3();
         const screenHeight =
           theater.screenWidth / (theater.screen === "imax" ? 1.43 : 1.9);
-        const screenCenterY = 0.16 + screenHeight * 0.32;
+        const screenCenterY = theater.screenBaseY + screenHeight * 0.32;
         const selectedLight = new THREE.PointLight(0xffc46a, 0, 3.2, 2);
         scene.add(selectedLight);
 
@@ -410,6 +411,8 @@ export default function SeatlineNYC() {
   const showtime =
     theater.showtimes.find((entry) => entry.id === showtimeId) ??
     theater.showtimes[0];
+  const selectedDate =
+    DATES.find((entry) => entry.id === dateId) ?? DATES[0];
   const sightline = getSightline(theater, selectedSeat);
 
   const handleTheater = (next: Theater) => {
@@ -540,7 +543,7 @@ export default function SeatlineNYC() {
           </div>
 
           <div className="seatline-source-note">
-            <span>PREVIEW DATA · JUL 18, 2026</span>
+            <span>PREVIEW DATA · JUL 22, 2026</span>
             <p>Availability and prices are a booking-demo snapshot. Check live inventory before purchase.</p>
           </div>
         </aside>
@@ -670,7 +673,7 @@ export default function SeatlineNYC() {
                 <span>{theater.auditorium} · {theater.format}</span>
               </div>
               <div>
-                <small>JUL 18 · {showtime.time} {showtime.period}</small>
+                <small>JUL {selectedDate.date} · {showtime.time} {showtime.period}</small>
                 <strong>ROW {selectedSeat.row} / SEAT {selectedSeat.number}</strong>
                 <span>{sightline.rating} sightline · {sightline.centering}% centered</span>
               </div>

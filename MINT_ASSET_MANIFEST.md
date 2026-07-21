@@ -3,6 +3,18 @@
 Date: 2026-07-18  
 Project: A 3D seat-sightline ticket preview for *The Odyssey* in New York City.
 
+## July 22 Preview Calibration
+
+The July 21 revision keeps the accepted Version 2 Mint assets unchanged and
+corrects only their data-driven runtime placement. The premium cinema recliner
+used at Lincoln Square and Times Square now uses its authored zero-degree
+forward axis; the separate dine-in recliner in Downtown Brooklyn retains its
+independently verified 180-degree calibration. Downtown Brooklyn's accepted
+wide blank screen is placed on a venue-specific higher and slightly closer
+anchor so the neutral projection surface remains clearly framed in the seated
+camera. No image, emissive material, video, procedural surface, or replacement
+asset was added. The deterministic preview schedule now begins July 22, 2026.
+
 ## Version 2 Full-Auditorium Contract
 
 The July 20 revision replaces the sparse modular presentation with one
@@ -184,9 +196,10 @@ but is no longer loaded into or projected on the 3D screen.
 - The screen artwork loader, emissive map, blue projection light, generated UV
   rewrite, and screen-material override were removed. Both screens now render
   only their Mint-authored neutral PBR surfaces and do not receive room shadows.
-- The coherent shells use one measured 180-degree room calibration; the chair
-  family retains its independently verified 180-degree facing correction so
-  every back points toward the booking camera and every seat faces the screen.
+- The coherent shells use one measured 180-degree room calibration. Live
+  camera QA established independent chair forward axes: zero degrees for the
+  premium cinema recliner and 180 degrees for the dine-in recliner, so every
+  seat faces its blank screen.
 - The selected chair is hidden only while its occupant camera is active and is
   restored for overview mode. Brooklyn uses a 1.5 m row pitch and 0.9 m chair
   width so the deeper dine-in tables do not collide with the sightline.

@@ -48,6 +48,8 @@ export type Theater = {
   roomDepth: number;
   roomHeight: number;
   screenWidth: number;
+  screenBaseY: number;
+  screenDepthFromFirstRow: number;
   screenZ: number;
   baseZ: number;
   seatBaseY: number;
@@ -61,9 +63,9 @@ export type Theater = {
 };
 
 export const DATES = [
-  { id: "2026-07-18", day: "SAT", date: "18" },
-  { id: "2026-07-19", day: "SUN", date: "19" },
-  { id: "2026-07-20", day: "MON", date: "20" },
+  { id: "2026-07-22", day: "WED", date: "22" },
+  { id: "2026-07-23", day: "THU", date: "23" },
+  { id: "2026-07-24", day: "FRI", date: "24" },
 ] as const;
 
 export const THEATERS: Theater[] = [
@@ -89,6 +91,8 @@ export const THEATERS: Theater[] = [
     roomDepth: 27,
     roomHeight: 18,
     screenWidth: 19,
+    screenBaseY: 0.16,
+    screenDepthFromFirstRow: 3.42,
     screenZ: -12.2,
     baseZ: -3,
     seatBaseY: 0.72,
@@ -125,6 +129,8 @@ export const THEATERS: Theater[] = [
     roomDepth: 23,
     roomHeight: 13,
     screenWidth: 17,
+    screenBaseY: 0.16,
+    screenDepthFromFirstRow: 3.06,
     screenZ: -10.2,
     baseZ: -2.8,
     seatBaseY: 0.58,
@@ -161,7 +167,9 @@ export const THEATERS: Theater[] = [
     roomWidth: 22,
     roomDepth: 18,
     roomHeight: 10,
-    screenWidth: 10.8,
+    screenWidth: 11.8,
+    screenBaseY: 0.85,
+    screenDepthFromFirstRow: 2.5,
     screenZ: -7.7,
     baseZ: -2,
     seatBaseY: 0.48,
