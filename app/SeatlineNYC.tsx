@@ -71,7 +71,7 @@ function TheaterPreview({
         renderer.toneMappingExposure = 1.24;
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFShadowMap;
-        const screenPlaneZ = theater.screenZ + 0.28;
+        const screenPlaneZ = theater.screenZ + theater.screenWallOffset;
 
         scene.add(new THREE.AmbientLight(0x7181aa, 2));
         scene.add(new THREE.HemisphereLight(0xa9bce4, 0x321916, 2.15));
@@ -160,12 +160,12 @@ function TheaterPreview({
         const screen = fitWidth(screenGltf.scene, theater.screenWidth);
         const authoredScreenAspect = theater.screen === "imax" ? 1.481 : 1.448;
         screen.scale.y *= authoredScreenAspect / theater.screenAspect;
-        screen.scale.z = 0.08;
+        screen.scale.z = theater.screenDepthScale;
         screen.position.set(0, theater.screenBaseY, screenPlaneZ);
         screen.traverse((child) => {
           const mesh = child as import("three").Mesh;
           if (!mesh.isMesh) return;
-          mesh.castShadow = false;
+          mesh.castShadow = theater.screenDepthScale > 0.1;
           mesh.receiveShadow = false;
           mesh.renderOrder = 1;
           const materials = Array.isArray(mesh.material)

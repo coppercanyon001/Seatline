@@ -39,6 +39,15 @@ gives the Mint screen authoritative ownership of the front-wall projection
 area while keeping every Mint chair and aisle fixture visibly in front. No new
 geometry, material, texture, image, video, or procedural surface was added.
 
+## Times Square Surface Definition
+
+The follow-up July 21 pass keeps the same validated blank Mint screen in Times
+Square but separates it more clearly from the front wall. Its venue data now
+gives the screen a deeper physical profile, a slightly forward wall mount, and
+enough surrounding wall reveal for the projection surface to read as a real
+screen instead of an empty frame. The Mint screen casts its own restrained
+architectural shadow; its authored material remains blank and unmodified.
+
 ## Version 2 Full-Auditorium Contract
 
 The July 20 revision replaces the sparse modular presentation with one
