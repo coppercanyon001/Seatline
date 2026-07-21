@@ -5,7 +5,7 @@ export const SEATLINE_MINT_ASSETS = {
     brooklyn: "/models/seatline-v2/brooklyn-table-auditorium.glb",
   },
   screens: {
-    imax: "/models/seatline-v2/tall-blank-screen.glb",
+    imax: "/models/seatline/imax-screen.glb",
     wide: "/models/seatline-v2/wide-blank-screen.glb",
   },
   chairs: {

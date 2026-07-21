@@ -48,6 +48,7 @@ export type Theater = {
   roomDepth: number;
   roomHeight: number;
   screenWidth: number;
+  screenAspect: number;
   screenBaseY: number;
   screenDepthFromFirstRow: number;
   screenZ: number;
@@ -90,9 +91,10 @@ export const THEATERS: Theater[] = [
     roomWidth: 30,
     roomDepth: 27,
     roomHeight: 18,
-    screenWidth: 19,
-    screenBaseY: 0.16,
-    screenDepthFromFirstRow: 3.42,
+    screenWidth: 10.5,
+    screenAspect: 1.43,
+    screenBaseY: 3.2,
+    screenDepthFromFirstRow: 0.2,
     screenZ: -12.2,
     baseZ: -3,
     seatBaseY: 0.72,
@@ -129,6 +131,7 @@ export const THEATERS: Theater[] = [
     roomDepth: 23,
     roomHeight: 13,
     screenWidth: 17,
+    screenAspect: 1.9,
     screenBaseY: 0.16,
     screenDepthFromFirstRow: 3.06,
     screenZ: -10.2,
@@ -159,7 +162,7 @@ export const THEATERS: Theater[] = [
     sourceUrl:
       "https://drafthouse.com/nyc/theater/downtown-brooklyn",
     shell: "brooklyn",
-    screen: "wide",
+    screen: "imax",
     chair: "dineIn",
     rows: 7,
     columns: 10,
@@ -167,9 +170,10 @@ export const THEATERS: Theater[] = [
     roomWidth: 22,
     roomDepth: 18,
     roomHeight: 10,
-    screenWidth: 11.8,
-    screenBaseY: 0.85,
-    screenDepthFromFirstRow: 2.5,
+    screenWidth: 8.2,
+    screenAspect: 1.9,
+    screenBaseY: 0.75,
+    screenDepthFromFirstRow: 0.2,
     screenZ: -7.7,
     baseZ: -2,
     seatBaseY: 0.48,

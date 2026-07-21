@@ -159,6 +159,8 @@ function TheaterPreview({
         };
 
         const screen = fitWidth(screenGltf.scene, theater.screenWidth);
+        const authoredScreenAspect = theater.screen === "imax" ? 1.481 : 1.448;
+        screen.scale.y *= authoredScreenAspect / theater.screenAspect;
         screen.scale.z = 0.08;
         screen.position.set(0, theater.screenBaseY, screenPlaneZ);
         screen.traverse((child) => {
@@ -210,9 +212,8 @@ function TheaterPreview({
         const targetPosition = new THREE.Vector3();
         const targetLook = new THREE.Vector3();
         const currentLook = new THREE.Vector3();
-        const screenHeight =
-          theater.screenWidth / (theater.screen === "imax" ? 1.43 : 1.9);
-        const screenCenterY = theater.screenBaseY + screenHeight * 0.32;
+        const screenHeight = theater.screenWidth / theater.screenAspect;
+        const screenCenterY = theater.screenBaseY + screenHeight * 0.5;
         const selectedLight = new THREE.PointLight(0xffc46a, 0, 3.2, 2);
         scene.add(selectedLight);
 

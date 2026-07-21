@@ -15,6 +15,20 @@ anchor so the neutral projection surface remains clearly framed in the seated
 camera. No image, emissive material, video, procedural surface, or replacement
 asset was added. The deterministic preview schedule now begins July 22, 2026.
 
+## Screen Layer Correction
+
+The July 21 screenshot review exposed two distinct screen-layer failures.
+Lincoln Square's Version 2 tall blank screen and Downtown Brooklyn's Version 2
+wide blank screen both reproduced dark triangular surface corruption in the
+production camera. Runtime inspection measured those two exports at nearly the
+same `1.416:1` and `1.448:1` geometry despite their different intended formats.
+Lincoln Square and Downtown Brooklyn therefore reuse the earlier validated Mint
+IMAX screen at its measured `1.481:1` authored ratio. Runtime placement scales
+that accepted mesh to each venue's target ratio, places it ahead of the shell,
+and targets the geometric center from the seat camera. Times Square retains its
+current wide-screen route. All projection surfaces remain blank, neutral,
+non-emissive Mint geometry.
+
 ## Version 2 Full-Auditorium Contract
 
 The July 20 revision replaces the sparse modular presentation with one
