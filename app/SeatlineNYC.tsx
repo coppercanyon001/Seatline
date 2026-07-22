@@ -513,218 +513,180 @@ export default function SeatlineNYC() {
         </section>
       )}
 
-      <header className="seatline-header">
-        <a className="seatline-brand" href="#" aria-label="Seatline NYC home">
-          <span className="seatline-brand-mark">S</span>
-          <span>
-            <strong>SEATLINE</strong>
-            <small>NEW YORK</small>
-          </span>
-        </a>
-        <div className="seatline-location">
-          <span>NYC</span>
-          <strong>NEW YORK, NY</strong>
-        </div>
-        <div className="seatline-steps" aria-label="Booking progress">
-          <span className="is-done">1</span><b>MOVIE</b>
-          <i />
-          <span className="is-active">2</span><b>SEATS</b>
-          <i />
-          <span>3</span><b>CHECKOUT</b>
-        </div>
-        <button className="seatline-account" type="button" aria-label="Account menu">
-          LO
-        </button>
-      </header>
+      <section className="seatline-immersive">
+        <TheaterPreview
+          key={theater.id}
+          theater={theater}
+          seats={seats}
+          selectedSeatId={selectedSeatId}
+          onSelectSeat={handleSeat}
+        />
 
-      <section className="seatline-workspace">
-        <aside className="seatline-sidebar">
-          <div className="seatline-movie">
-            <div className="seatline-poster" aria-hidden="true">
-              {/* Mint-authored original art, kept separate from official film key art. */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={ASSETS.images.mythicSea} alt="" />
-              <span>R</span>
-            </div>
-            <div>
-              <p>NOW PLAYING</p>
-              <h1>THE ODYSSEY</h1>
-              <div className="seatline-meta">
-                <span>2 HR 52 MIN</span>
-                <span>MYTHIC EPIC</span>
-                <span>2026</span>
-              </div>
-            </div>
+        <header className="seatline-float seatline-floating-header">
+          <a className="seatline-brand" href="#" aria-label="Seatline NYC home">
+            <span className="seatline-brand-mark"><i>S</i></span>
+            <span>
+              <strong>SEATLINE</strong>
+              <small>NEW YORK</small>
+            </span>
+          </a>
+          <div className="seatline-floating-movie">
+            <span>NOW PLAYING</span>
+            <h1>THE ODYSSEY</h1>
+            <small>2 HR 52 MIN · R · 2026</small>
           </div>
+        </header>
 
-          <div className="seatline-section">
-            <div className="seatline-section-title">
-              <span>01</span>
-              <div>
-                <small>CHOOSE A</small>
-                <h2>NEW YORK THEATER</h2>
-              </div>
-            </div>
-            <div className="seatline-theaters">
-              {THEATERS.map((entry) => (
-                <button
-                  key={entry.id}
-                  type="button"
-                  className={entry.id === theater.id ? "is-active" : ""}
-                  onClick={() => handleTheater(entry)}
-                >
-                  <span className="seatline-radio" />
-                  <span>
-                    <strong>{entry.shortName}</strong>
-                    <small>{entry.neighborhood} · {entry.distance}</small>
-                  </span>
-                  <b>{entry.format}</b>
-                </button>
-              ))}
-            </div>
+        <nav className="seatline-float seatline-venue-dock" aria-label="Choose a New York theater">
+          <div className="seatline-float-title">
+            <span>01</span>
+            <strong>CHOOSE YOUR THEATER</strong>
           </div>
+          <div className="seatline-theaters">
+            {THEATERS.map((entry) => (
+              <button
+                key={entry.id}
+                type="button"
+                className={entry.id === theater.id ? "is-active" : ""}
+                onClick={() => handleTheater(entry)}
+              >
+                <span className="seatline-radio" />
+                <span>
+                  <strong>{entry.shortName}</strong>
+                  <small>{entry.neighborhood} · {entry.distance}</small>
+                </span>
+                <b>{entry.format}</b>
+              </button>
+            ))}
+          </div>
+        </nav>
 
-          <div className="seatline-section seatline-showtime-section">
-            <div className="seatline-section-title">
-              <span>02</span>
-              <div>
-                <small>CHOOSE A</small>
-                <h2>SHOWTIME</h2>
-              </div>
-            </div>
-            <div className="seatline-dates" aria-label="Select date">
-              {DATES.map((date) => (
-                <button
-                  key={date.id}
-                  type="button"
-                  className={dateId === date.id ? "is-active" : ""}
-                  onClick={() => setDateId(date.id)}
-                >
-                  <small>{date.day}</small>
-                  <strong>{date.date}</strong>
-                </button>
-              ))}
-              <span>JUL</span>
-            </div>
-            <div className="seatline-showtimes">
-              {theater.showtimes.map((entry) => (
-                <button
-                  key={entry.id}
-                  type="button"
-                  className={entry.id === showtime.id ? "is-active" : ""}
-                  onClick={() => setShowtimeId(entry.id)}
-                >
-                  <strong>{entry.time}</strong>
-                  <small>{entry.period}</small>
-                  <span>{entry.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="seatline-source-note">
-            <span>PREVIEW DATA · JUL 22, 2026</span>
-            <p>Availability and prices are a booking-demo snapshot. Check live inventory before purchase.</p>
-          </div>
+        <aside className="seatline-float seatline-format-float">
+          <span>{theater.auditorium}</span>
+          <strong>{theater.format}</strong>
+          <small>{theater.formatNote}</small>
         </aside>
 
-        <section className="seatline-main">
-          <div className="seatline-main-head">
+        <section className="seatline-float seatline-showtime-dock" aria-label="Choose a date and showtime">
+          <div className="seatline-float-title">
+            <span>02</span>
             <div>
-              <span>{theater.auditorium} · {theater.format}</span>
-              <h2>CHOOSE YOUR SIGHTLINE</h2>
-              <p>{theater.name} · {theater.address}</p>
-            </div>
-            <div className="seatline-format-card">
-              <span>FORMAT</span>
-              <strong>{theater.format}</strong>
-              <small>{theater.formatNote}</small>
+              <strong>SELECT SHOWTIME</strong>
+              <small>{theater.shortName} · {theater.address}</small>
             </div>
           </div>
-
-          <div className="seatline-stage">
-            <TheaterPreview
-              key={theater.id}
-              theater={theater}
-              seats={seats}
-              selectedSeatId={selectedSeatId}
-              onSelectSeat={handleSeat}
-            />
-
-            <div className="seatline-seat-panel">
-              <div className="seatline-screen-label">
-                <span />
-                <small>SCREEN</small>
-              </div>
-              <div
-                className="seatline-seat-map"
-                style={{ "--seat-columns": theater.columns } as React.CSSProperties}
+          <div className="seatline-dates" aria-label="Select date">
+            {DATES.map((date) => (
+              <button
+                key={date.id}
+                type="button"
+                className={dateId === date.id ? "is-active" : ""}
+                onClick={() => setDateId(date.id)}
               >
-                {seats.map((seat) => (
-                  <button
-                    key={seat.id}
-                    type="button"
-                    className={[
-                      `is-${seat.status}`,
-                      seat.id === selectedSeatId ? "is-selected" : "",
-                      theater.aislesAfter.includes(seat.columnIndex)
-                        ? "is-after-aisle"
-                        : "",
-                    ].join(" ")}
-                    disabled={seat.status === "occupied"}
-                    aria-label={`Row ${seat.row}, seat ${seat.number}, ${seat.status}`}
-                    aria-pressed={seat.id === selectedSeatId}
-                    onClick={() => handleSeat(seat.id)}
-                  >
-                    <span>{seat.number}</span>
-                  </button>
-                ))}
-              </div>
-              <div className="seatline-legend">
-                <span><i className="available" />AVAILABLE</span>
-                <span><i className="selected" />SELECTED</span>
-                <span><i className="occupied" />TAKEN</span>
-                <span><i className="accessible" />ACCESSIBLE</span>
-              </div>
+                <small>{date.day}</small>
+                <strong>{date.date}</strong>
+              </button>
+            ))}
+            <span>JUL</span>
+          </div>
+          <div className="seatline-showtimes">
+            {theater.showtimes.map((entry) => (
+              <button
+                key={entry.id}
+                type="button"
+                className={entry.id === showtime.id ? "is-active" : ""}
+                onClick={() => setShowtimeId(entry.id)}
+              >
+                <strong>{entry.time}</strong>
+                <small>{entry.period}</small>
+                <span>{entry.label}</span>
+              </button>
+            ))}
+          </div>
+          <p className="seatline-overlay-note">PREVIEW DATA · JUL 22, 2026</p>
+        </section>
+
+        <section className="seatline-float seatline-seat-dock" aria-label="Choose a seat">
+          <div className="seatline-float-title">
+            <span>03</span>
+            <div>
+              <strong>SELECT YOUR SEAT</strong>
+              <small>Every seat updates the 3D sightline</small>
             </div>
           </div>
-
-          <div className="seatline-selection">
-            <div className="seatline-seat-number">
-              <small>YOUR SEAT</small>
-              <strong>{selectedSeat.id}</strong>
-              <span>ROW {selectedSeat.row} · SEAT {selectedSeat.number}</span>
-            </div>
-            <div className="seatline-sightline">
-              <div>
-                <small>SIGHTLINE</small>
-                <strong>{sightline.rating}</strong>
-              </div>
-              <span><i style={{ width: `${sightline.centering}%` }} /></span>
-              <b>{sightline.centering}% CENTERED</b>
-            </div>
-            <div className="seatline-spec">
-              <small>SCREEN FILL</small>
-              <strong>{sightline.screenFill}%</strong>
-            </div>
-            <div className="seatline-spec">
-              <small>DISTANCE</small>
-              <strong>{sightline.distance} FT</strong>
-            </div>
-            <div className="seatline-price">
-              <small>1 TICKET</small>
-              <strong>${showtime.price.toFixed(2)}</strong>
-            </div>
-            <button
-              className="seatline-reserve"
-              type="button"
-              onClick={() => setBookingOpen(true)}
+          <div className="seatline-screen-label">
+            <span />
+            <small>SCREEN</small>
+          </div>
+          <div className="seatline-seat-map-wrap">
+            <div
+              className="seatline-seat-map"
+              style={{ "--seat-columns": theater.columns } as React.CSSProperties}
             >
-              RESERVE {selectedSeat.id}
-              <span>CONTINUE TO SUMMARY</span>
-            </button>
+              {seats.map((seat) => (
+                <button
+                  key={seat.id}
+                  type="button"
+                  className={[
+                    `is-${seat.status}`,
+                    seat.id === selectedSeatId ? "is-selected" : "",
+                    theater.aislesAfter.includes(seat.columnIndex)
+                      ? "is-after-aisle"
+                      : "",
+                  ].join(" ")}
+                  disabled={seat.status === "occupied"}
+                  aria-label={`Row ${seat.row}, seat ${seat.number}, ${seat.status}`}
+                  aria-pressed={seat.id === selectedSeatId}
+                  onClick={() => handleSeat(seat.id)}
+                >
+                  <span>{seat.number}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="seatline-legend">
+            <span><i className="available" />AVAILABLE</span>
+            <span><i className="selected" />SELECTED</span>
+            <span><i className="occupied" />TAKEN</span>
+            <span><i className="accessible" />ACCESSIBLE</span>
           </div>
         </section>
+
+        <div className="seatline-selection seatline-selection-floating">
+          <div className="seatline-seat-number">
+            <small>YOUR SEAT</small>
+            <strong>{selectedSeat.id}</strong>
+            <span>ROW {selectedSeat.row} · SEAT {selectedSeat.number}</span>
+          </div>
+          <div className="seatline-sightline">
+            <div>
+              <small>SIGHTLINE</small>
+              <strong>{sightline.rating}</strong>
+            </div>
+            <span><i style={{ width: `${sightline.centering}%` }} /></span>
+            <b>{sightline.centering}% CENTERED</b>
+          </div>
+          <div className="seatline-spec">
+            <small>SCREEN FILL</small>
+            <strong>{sightline.screenFill}%</strong>
+          </div>
+          <div className="seatline-spec">
+            <small>DISTANCE</small>
+            <strong>{sightline.distance} FT</strong>
+          </div>
+          <div className="seatline-price">
+            <small>{selectedDate.day} · JUL {selectedDate.date} · {showtime.time} {showtime.period}</small>
+            <strong>${showtime.price.toFixed(2)}</strong>
+          </div>
+          <button
+            className="seatline-reserve"
+            type="button"
+            onClick={() => setBookingOpen(true)}
+          >
+            RESERVE {selectedSeat.id}
+            <span>CONTINUE TO SUMMARY</span>
+          </button>
+        </div>
       </section>
 
       {bookingOpen && (

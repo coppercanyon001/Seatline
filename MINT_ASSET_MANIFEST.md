@@ -303,3 +303,14 @@ but is no longer loaded into or projected on the 3D screen.
   and shortens to a static title beat when reduced motion is requested.
 - Theater assets, blank screens, seat cameras, and venue interaction remain
   unchanged beneath the intro layer.
+
+## Full-Viewport Booking Interface
+
+- The July 22 interface revision gives the Mint-authored auditorium the entire
+  browser viewport and moves venue, showtime, seat-map, sightline, price, and
+  reserve controls into compact translucent DOM panels above the 3D render.
+- The overlay uses only deterministic text, borders, layout, and interaction
+  states. It introduces no visible world asset, texture, geometry, image,
+  audio, projection content, or runtime material override.
+- All accepted Mint shells, chairs, fixtures, and blank screens retain their
+  existing transforms, camera targets, and authoritative surface ownership.
