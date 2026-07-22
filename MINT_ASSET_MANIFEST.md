@@ -293,3 +293,13 @@ but is no longer loaded into or projected on the 3D screen.
   dine-in chair family, seat layout, blank screen, and camera remain unchanged.
 - The unstable Brooklyn shell remains in the local provenance catalog but is
   superseded and no longer selected by the runtime asset map.
+
+## Cinematic Landing Intro
+
+- The landing sequence is deterministic interface presentation built from the
+  existing Seatline wordmark, text, borders, and CSS motion; it adds no world
+  geometry, texture, image, video, sound, or projected theater content.
+- The sequence clears automatically, includes a visible Skip Intro control,
+  and shortens to a static title beat when reduced motion is requested.
+- Theater assets, blank screens, seat cameras, and venue interaction remain
+  unchanged beneath the intro layer.

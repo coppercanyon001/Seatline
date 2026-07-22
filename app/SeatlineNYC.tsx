@@ -428,6 +428,7 @@ function TheaterPreview({
 }
 
 export default function SeatlineNYC() {
+  const [introVisible, setIntroVisible] = useState(true);
   const [theaterId, setTheaterId] = useState(THEATERS[0].id);
   const theater = THEATERS.find((entry) => entry.id === theaterId) ?? THEATERS[0];
   const seats = useMemo(() => buildSeats(theater), [theater]);
@@ -435,6 +436,18 @@ export default function SeatlineNYC() {
   const [selectedSeatId, setSelectedSeatId] = useState(theater.defaultSeat);
   const [dateId, setDateId] = useState<(typeof DATES)[number]["id"]>(DATES[0].id);
   const [bookingOpen, setBookingOpen] = useState(false);
+
+  useEffect(() => {
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const introTimer = window.setTimeout(
+      () => setIntroVisible(false),
+      reduceMotion ? 650 : 3800,
+    );
+
+    return () => window.clearTimeout(introTimer);
+  }, []);
 
   const selectedSeat =
     seats.find((seat) => seat.id === selectedSeatId) ??
@@ -464,6 +477,42 @@ export default function SeatlineNYC() {
 
   return (
     <main className="seatline-app">
+      {introVisible && (
+        <section
+          className="seatline-intro"
+          aria-label="Seatline NYC presents The Odyssey"
+        >
+          <button
+            className="seatline-intro-skip"
+            type="button"
+            onClick={() => setIntroVisible(false)}
+          >
+            SKIP INTRO
+          </button>
+
+          <div className="seatline-intro-scan" aria-hidden="true" />
+          <div className="seatline-intro-orbit" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+          </div>
+
+          <div className="seatline-intro-title">
+            <div className="seatline-intro-mark" aria-hidden="true"><span>S</span></div>
+            <p>SEATLINE NYC PRESENTS</p>
+            <h1>THE ODYSSEY</h1>
+            <span className="seatline-intro-rule" aria-hidden="true" />
+            <strong>CHOOSE YOUR SEAT. SEE YOUR JOURNEY.</strong>
+          </div>
+
+          <div className="seatline-intro-foot">
+            <span>NEW YORK</span>
+            <i aria-hidden="true" />
+            <span>JUL 22</span>
+          </div>
+        </section>
+      )}
+
       <header className="seatline-header">
         <a className="seatline-brand" href="#" aria-label="Seatline NYC home">
           <span className="seatline-brand-mark">S</span>
