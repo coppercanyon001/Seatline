@@ -2,7 +2,7 @@ export const SEATLINE_MINT_ASSETS = {
   shells: {
     monument: "/models/seatline-v2/lincoln-imax-auditorium.glb",
     midtown: "/models/seatline-v2/times-square-premium-auditorium.glb",
-    brooklyn: "/models/seatline-v2/brooklyn-table-auditorium.glb",
+    brooklyn: "/models/seatline-v2/times-square-premium-auditorium.glb",
   },
   screens: {
     imax: "/models/seatline/imax-screen.glb",

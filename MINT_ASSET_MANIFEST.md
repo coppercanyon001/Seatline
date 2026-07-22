@@ -283,3 +283,13 @@ but is no longer loaded into or projected on the 3D screen.
 - Its auditorium-specific wall offset was reduced from `0.28` to `0.06` world
   units so the blank screen sits deeper against the authored front wall.
 - Times Square and Downtown Brooklyn screen transforms remain unchanged.
+
+## Downtown Brooklyn Background Stability
+
+- Live seat and overview camera checks isolated the diagonal front-wall breakup
+  and wavy foreground patch to the Downtown Brooklyn auditorium shell export.
+- Downtown Brooklyn now reuses the already validated Mint Times Square
+  auditorium shell at Brooklyn's existing smaller room dimensions, while its
+  dine-in chair family, seat layout, blank screen, and camera remain unchanged.
+- The unstable Brooklyn shell remains in the local provenance catalog but is
+  superseded and no longer selected by the runtime asset map.
