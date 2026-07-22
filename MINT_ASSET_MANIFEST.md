@@ -275,3 +275,11 @@ but is no longer loaded into or projected on the 3D screen.
   showtimes, the 3D view, the complete seat map, selection metrics, and reserve
   action without horizontal page overflow.
 - Browser QA reports no console errors or missing production assets.
+
+## Lincoln Square Screen Depth Finish
+
+- The existing validated Mint IMAX screen remains the authoritative Lincoln
+  Square screen asset; no new visible asset or material was introduced.
+- Its auditorium-specific wall offset was reduced from `0.28` to `0.06` world
+  units so the blank screen sits deeper against the authored front wall.
+- Times Square and Downtown Brooklyn screen transforms remain unchanged.

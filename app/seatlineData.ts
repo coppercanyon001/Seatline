@@ -97,7 +97,7 @@ export const THEATERS: Theater[] = [
     screenWidth: 24,
     screenAspect: 1.43,
     screenBaseY: 0.4,
-    screenWallOffset: 0.28,
+    screenWallOffset: 0.06,
     screenDepthScale: 0.08,
     screenBottomCrop: 0,
     screenDepthFromFirstRow: 9.2,
