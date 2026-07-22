@@ -787,10 +787,10 @@ button { color: inherit; }
 .seatline-seat-dock {
   top: 145px;
   right: 18px;
-  width: 302px;
+  width: 330px;
   max-height: calc(100dvh - 282px);
   padding: 16px;
-  overflow: auto;
+  overflow: hidden;
 }
 .seatline-seat-dock .seatline-screen-label {
   width: 88%;
@@ -798,7 +798,7 @@ button { color: inherit; }
 }
 .seatline-seat-map-wrap {
   width: 100%;
-  overflow: auto;
+  overflow: visible;
 }
 .seatline-seat-dock .seatline-seat-map { margin: 5px auto 13px; }
 .seatline-seat-dock .seatline-legend { gap: 8px; }
@@ -825,10 +825,10 @@ button { color: inherit; }
 }
 .seatline-immersive > .seatline-preview .seatline-overview-button {
   top: 119px;
-  right: 338px;
+  right: 366px;
 }
 .seatline-immersive > .seatline-preview .seatline-return-button {
-  right: 338px;
+  right: 366px;
   bottom: 124px;
 }
 .seatline-immersive > .seatline-preview .seatline-canvas-hint {
@@ -854,7 +854,7 @@ button { color: inherit; }
   .seatline-immersive > .seatline-preview .seatline-preview-top { display: none; }
   .seatline-immersive > .seatline-preview .seatline-overview-button {
     top: 214px;
-    right: 338px;
+    right: 366px;
   }
 }
 
@@ -900,7 +900,7 @@ button { color: inherit; }
   .seatline-seat-dock {
     top: 152px;
     right: 10px;
-    width: 286px;
+    width: 320px;
     max-height: calc(100dvh - 282px);
   }
   .seatline-selection-floating {
